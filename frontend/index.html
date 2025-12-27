@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIBSYSNET - General Insurance Broker System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-blue-900">GIBSYSNET</h1>
+                        <p class="text-xs text-gray-600">Insurance Broker System</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-blue-600 font-medium">Features</a>
+                    <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+                </div>
+                
+                <div>
+                    <a href="login.html" 
+                       class="bg-blue-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-800 transition duration-300">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20 md:py-28">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                General Insurance Broker System Network
+            </h1>
+            <p class="text-xl mb-10 max-w-3xl mx-auto opacity-90">
+                Comprehensive solution for managing insurance brokerage operations from end to end
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="login.html" 
+                   class="bg-white text-blue-700 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition duration-300">
+                    Get Started
+                </a>
+                <a href="#features" 
+                   class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-white hover:text-blue-700 transition duration-300">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 text-blue-900">System Features</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                Comprehensive modules covering all aspects of insurance brokerage operations
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-file-contract text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Policy Management</h3>
+                    <p class="text-gray-600">
+                        Complete policy lifecycle management from quotation to renewal
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-bar text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Reporting & Analytics</h3>
+                    <p class="text-gray-600">
+                        Comprehensive reports and analytics for business intelligence
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-user-shield text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Compliance Management</h3>
+                    <p class="text-gray-600">
+                        Regulatory compliance and reporting tools
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12 text-blue-900">About GIBSYSNET</h2>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <p class="text-gray-700 mb-6">
+                        GIBSYSNET is a comprehensive web application designed specifically for general insurance brokers. 
+                        It streamlines the entire business process from client acquisition to policy management and claims processing.
+                    </p>
+                    <p class="text-gray-700 mb-6">
+                        The system provides real-time monitoring, automated reporting, and compliance management to help 
+                        insurance brokers operate more efficiently and profitably.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-700">24/7</div>
+                            <div class="text-gray-600">Availability</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-700">100%</div>
+                            <div class="text-gray-600">Cloud Based</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-700">SSL</div>
+                            <div class="text-gray-600">Secure</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-700">Multi</div>
+                            <div class="text-gray-600">User Access</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-16 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-blue-900">Contact Us</h2>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <div class="text-center mb-8">
+                    <i class="fas fa-headset text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-bold">Support Center</h3>
+                    <p class="text-gray-600">Contact our support team for assistance</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <i class="fas fa-phone text-blue-600 text-2xl mb-3"></i>
+                        <h4 class="font-bold">Phone Support</h4>
+                        <p class="text-gray-600">+62 21 1234 5678</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-envelope text-blue-600 text-2xl mb-3"></i>
+                        <h4 class="font-bold">Email Support</h4>
+                        <p class="text-gray-600">support@gibsysnet.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                        <div>
+                            <h3 class="text-xl font-bold">GIBSYSNET</h3>
+                            <p class="text-blue-200 text-sm">Insurance Broker System v2.1</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <p class="text-blue-200">© 2025 GIBSYSNET. All rights reserved.</p>
+                    <p class="text-blue-200 text-sm mt-2">General Insurance Broker System Network</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

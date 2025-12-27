@@ -1,0 +1,16 @@
+# backend/.htaccess
+RewriteEngine On
+RewriteBase /backend/
+
+# Redirect semua API requests ke index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+
+# Disable directory listing
+Options -Indexes

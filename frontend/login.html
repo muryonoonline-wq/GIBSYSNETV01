@@ -1,0 +1,378 @@
+<!-- frontend/login.html (Revisi dengan demo user selector) -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GIBSYSNET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .login-box {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .user-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .user-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .badge-superadmin { background-color: #ef4444; color: white; }
+        .badge-admin { background-color: #3b82f6; color: white; }
+        .badge-manager { background-color: #10b981; color: white; }
+        .badge-broker { background-color: #f59e0b; color: white; }
+        .badge-user { background-color: #6b7280; color: white; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="login-box rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-800 to-blue-700 text-white p-8 text-center">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-shield-alt text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold">GIBSYSNET DEMO</h1>
+                <p class="text-blue-100 mt-1">General Insurance Broker System - Demo Version</p>
+                <p class="text-blue-200 text-sm mt-2">Pilih user demo untuk login otomatis</p>
+            </div>
+        </div>
+        
+        <!-- Demo User Selector -->
+        <div class="p-6 border-b">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">Pilih User Demo:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="demoUsers">
+                <!-- Demo users akan diisi oleh JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="p-8">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">
+                        <i class="fas fa-user-circle mr-2"></i>Username
+                    </label>
+                    <input type="text" id="username" 
+                           class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                           placeholder="Masukkan username"
+                           required
+                           autocomplete="username">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <input type="password" id="password" 
+                           class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                           placeholder="Masukkan password"
+                           required
+                           autocomplete="current-password"
+                           value="password123">
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500">
+                        <label for="remember" class="ml-2 text-sm text-gray-600">Ingat saya</label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Lupa Password?</a>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="submit" 
+                            id="loginBtn"
+                            class="w-full bg-gradient-to-r from-blue-700 to-blue-600 text-white font-semibold py-3 rounded-lg hover:from-blue-800 hover:to-blue-700 transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Login
+                    </button>
+                    
+                    <button type="button" 
+                            id="demoLoginBtn"
+                            class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold py-3 rounded-lg hover:from-green-700 hover:to-green-600 transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-magic mr-2"></i> Demo Login
+                    </button>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Info Login Demo:</strong><br>
+                                Password untuk semua user demo: <code class="font-mono">password123</code><br>
+                                Klik user demo di atas untuk login otomatis
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center pt-4 border-t border-gray-200">
+                    <p class="text-sm text-gray-600">
+                        Version 2.1.0 © 2025 GIBSYSNET
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data user demo
+        const demoUsers = [
+            {
+                username: 'superadmin',
+                password: 'password123',
+                user_id: 'SU001',
+                full_name: 'Super Administrator',
+                user_level: 'super_admin',
+                email: 'superadmin@gibsysnet.com',
+                badge_class: 'badge-superadmin',
+                badge_text: 'Super Admin',
+                description: 'Akses penuh ke semua fitur sistem'
+            },
+            {
+                username: 'admin',
+                password: 'password123',
+                user_id: 'AD001',
+                full_name: 'System Administrator',
+                user_level: 'admin',
+                email: 'admin@gibsysnet.com',
+                badge_class: 'badge-admin',
+                badge_text: 'Admin',
+                description: 'Akses administrator dengan kontrol penuh'
+            },
+            {
+                username: 'manager',
+                password: 'password123',
+                user_id: 'MN001',
+                full_name: 'Sales Manager',
+                user_level: 'manager',
+                email: 'manager@gibsysnet.com',
+                badge_class: 'badge-manager',
+                badge_text: 'Manager',
+                description: 'Manajemen tim sales dan laporan'
+            },
+            {
+                username: 'broker1',
+                password: 'password123',
+                user_id: 'BR001',
+                full_name: 'John Broker',
+                user_level: 'broker',
+                email: 'john.broker@gibsysnet.com',
+                badge_class: 'badge-broker',
+                badge_text: 'Broker',
+                description: 'Broker aktif dengan klien portfolio'
+            },
+            {
+                username: 'broker2',
+                password: 'password123',
+                user_id: 'BR002',
+                full_name: 'Sarah Broker',
+                user_level: 'broker',
+                email: 'sarah.broker@gibsysnet.com',
+                badge_class: 'badge-broker',
+                badge_text: 'Broker',
+                description: 'Broker spesialis asuransi properti'
+            },
+            {
+                username: 'user',
+                password: 'password123',
+                user_id: 'US001',
+                full_name: 'Regular User',
+                user_level: 'user',
+                email: 'user@gibsysnet.com',
+                badge_class: 'badge-user',
+                badge_text: 'User',
+                description: 'Akses terbatas untuk view data'
+            },
+            {
+                username: 'compliance',
+                password: 'password123',
+                user_id: 'CO001',
+                full_name: 'Compliance Officer',
+                user_level: 'admin',
+                email: 'compliance@gibsysnet.com',
+                badge_class: 'badge-admin',
+                badge_text: 'Compliance',
+                description: 'Officer compliance dan regulasi'
+            }
+        ];
+
+        // Render demo user cards
+        function renderDemoUsers() {
+            const container = document.getElementById('demoUsers');
+            container.innerHTML = '';
+            
+            demoUsers.forEach(user => {
+                const card = document.createElement('div');
+                card.className = 'user-card bg-white p-4 rounded-lg border shadow-sm';
+                card.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-gray-800">${user.full_name}</h4>
+                                <span class="text-xs px-2 py-1 rounded-full ${user.badge_class}">
+                                    ${user.badge_text}
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">@${user.username}</p>
+                            <p class="text-xs text-gray-500 mt-2">${user.description}</p>
+                            <div class="mt-3 flex items-center text-sm">
+                                <i class="fas fa-key text-gray-400 mr-1"></i>
+                                <span class="text-gray-600">Password: ${user.password}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    // Remove selected class from all cards
+                    document.querySelectorAll('.user-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked card
+                    card.classList.add('selected');
+                    
+                    // Fill login form
+                    document.getElementById('username').value = user.username;
+                    document.getElementById('password').value = user.password;
+                });
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDemoUsers();
+            
+            // Auto-select first user
+            setTimeout(() => {
+                const firstCard = document.querySelector('.user-card');
+                if (firstCard) {
+                    firstCard.click();
+                }
+            }, 100);
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Validate
+            if (!username || !password) {
+                showAlert('error', 'Username dan password harus diisi');
+                return;
+            }
+            
+            // Simulate login process
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Proses Login...';
+            loginBtn.disabled = true;
+            
+            try {
+                // Check if user exists in demo data
+                const user = demoUsers.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    // Show success message
+                    showAlert('success', `Login berhasil sebagai ${user.full_name}`);
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('gibsysnet_user', JSON.stringify(user));
+                    localStorage.setItem('gibsysnet_token', 'demo_token_' + Math.random().toString(36).substr(2));
+                    
+                    // Redirect based on user level
+                    setTimeout(() => {
+                        if (user.user_level === 'user') {
+                            window.location.href = 'dashboard-user.html';
+                        } else {
+                            window.location.href = 'dashboard-admin.html';
+                        }
+                    }, 1000);
+                } else {
+                    showAlert('error', 'Username atau password salah');
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Login';
+                    loginBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('error', 'Terjadi kesalahan saat login');
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Login';
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Demo login button
+        document.getElementById('demoLoginBtn').addEventListener('click', function() {
+            const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
+            document.getElementById('username').value = randomUser.username;
+            document.getElementById('password').value = randomUser.password;
+            
+            // Trigger form submission
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        });
+
+        // Alert function
+        function showAlert(type, message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            alertDiv.textContent = message;
+            alertDiv.style.transform = 'translateX(100%)';
+            
+            document.body.appendChild(alertDiv);
+            
+            // Animate in
+            setTimeout(() => {
+                alertDiv.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.parentNode.removeChild(alertDiv);
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>
