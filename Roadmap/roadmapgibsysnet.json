@@ -1,0 +1,477 @@
+{
+  "master_prompt": {
+    "purpose": "GIBSYSNET Project Roadmap Master Prompt for AI Development Assistant",
+    "system_role": "Anda adalah AI Development Assistant untuk proyek GIBSYSNET (General Insurance Broker System Network). Gunakan roadmap ini sebagai acuan utama untuk semua pengembangan.",
+    "project_context": "Sistem manajemen broker asuransi umum untuk Indonesia, fokus pada user-friendly, scalable, dan compliant dengan regulasi asuransi."
+  },
+
+  "project_metadata": {
+    "project_name": "GIBSYSNET",
+    "full_name": "General Insurance Broker System Network",
+    "version": "1.0.0",
+    "current_status": "Phase 1 - Core Modules Development",
+    "start_date": "2024-01-01",
+    "target_mvp_release": "8-10 minggu",
+    "target_full_release": "3 bulan",
+    "tech_stack": {
+      "frontend": ["HTML5", "Tailwind CSS", "JavaScript", "Chart.js"],
+      "backend_options": ["Node.js/Express.js", "PHP/Laravel"],
+      "database": ["MySQL", "PostgreSQL"],
+      "hosting": ["AWS", "DigitalOcean", "VPS lokal"],
+      "version_control": "Git/GitHub"
+    }
+  },
+
+  "vision_mission": {
+    "vision": "Menjadi sistem terdepan untuk manajemen broker asuransi umum di Indonesia",
+    "mission": "Menyediakan platform yang user-friendly, scalable, dan compliant dengan regulasi asuransi"
+  },
+
+  "user_roles": [
+    {
+      "id": "super_admin",
+      "name": "Super Administrator",
+      "permissions": "Full system access",
+      "description": "Akses penuh ke semua fitur sistem"
+    },
+    {
+      "id": "admin",
+      "name": "Administrator",
+      "permissions": "System administration",
+      "description": "Administrator sistem dengan kontrol penuh"
+    },
+    {
+      "id": "manager",
+      "name": "Manager",
+      "permissions": "Team and report management",
+      "description": "Manajemen tim dan laporan"
+    },
+    {
+      "id": "broker",
+      "name": "Broker",
+      "permissions": "Client and policy management",
+      "description": "Manajemen klien dan polis asuransi"
+    },
+    {
+      "id": "user",
+      "name": "Regular User",
+      "permissions": "Basic access",
+      "description": "Akses dasar untuk melihat data"
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance Officer",
+      "permissions": "Compliance monitoring",
+      "description": "Monitoring compliance dan regulasi"
+    }
+  ],
+
+  "development_roadmap": {
+    "phases": [
+      {
+        "phase_id": "phase_0",
+        "name": "PROJEK SETUP & PLANNING",
+        "status": "COMPLETED",
+        "duration": "1-2 Hari",
+        "stages": [
+          {
+            "stage_id": "stage_0_1",
+            "name": "Environment Setup",
+            "status": "✅",
+            "tasks": ["Setup Git repository", "Install VS Code dengan extensions", "Setup project structure", "Dokumentasi awal"]
+          },
+          {
+            "stage_id": "stage_0_2",
+            "name": "Requirement Analysis",
+            "status": "✅",
+            "tasks": ["Identifikasi user roles", "Define use cases", "Wireframe dasar", "Tech stack selection"]
+          },
+          {
+            "stage_id": "stage_0_3",
+            "name": "UI/UX Foundation",
+            "status": "✅",
+            "tasks": ["Design system (colors, typography)", "Login system dengan multi-role", "Basic dashboard layout", "Navigation structure"]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_1",
+        "name": "CORE MODULES DEVELOPMENT",
+        "status": "IN PROGRESS",
+        "duration": "2-3 Minggu",
+        "current_focus": true,
+        "stages": [
+          {
+            "stage_id": "stage_1_1",
+            "name": "Authentication & Authorization",
+            "duration": "Minggu 1",
+            "status": "✅",
+            "tasks": [
+              {"task": "Login system dengan role-based access", "status": "✅"},
+              {"task": "Dashboard admin (dashboard-admin.html)", "status": "✅"},
+              {"task": "Dashboard regular user (dashboard.html)", "status": "✅"},
+              {"task": "Session management", "status": "🔄"},
+              {"task": "Password reset flow", "status": "⏳"},
+              {"task": "Two-factor authentication (optional)", "status": "⏳"}
+            ]
+          },
+          {
+            "stage_id": "stage_1_2",
+            "name": "Policy Management Module",
+            "duration": "Minggu 1-2",
+            "status": "🔄",
+            "tasks": [
+              {"task": "My Policies CRUD operations", "status": "✅"},
+              {"task": "Policy creation wizard", "status": "🔄"},
+              {"task": "Policy details view", "status": "⏳"},
+              {"task": "Filtering & searching", "status": "⏳"},
+              {"task": "Bulk operations", "status": "⏳"},
+              {"task": "Policy templates", "status": "⏳"},
+              {"task": "Document upload", "status": "⏳"}
+            ]
+          },
+          {
+            "stage_id": "stage_1_3",
+            "name": "Client Management",
+            "duration": "Minggu 2",
+            "status": "🔄",
+            "tasks": [
+              {"task": "Client database", "status": "🔄"},
+              {"task": "Client profiles", "status": "🔄"},
+              {"task": "Contact management", "status": "⏳"},
+              {"task": "Client communication log", "status": "⏳"},
+              {"task": "Client segmentation", "status": "⏳"},
+              {"task": "Import/export clients", "status": "⏳"}
+            ]
+          },
+          {
+            "stage_id": "stage_1_4",
+            "name": "Claims Management",
+            "duration": "Minggu 2-3",
+            "status": "🔄",
+            "tasks": [
+              {"task": "Claims submission", "status": "🔄"},
+              {"task": "Claims tracking", "status": "⏳"},
+              {"task": "Documents upload", "status": "⏳"},
+              {"task": "Approval workflow", "status": "⏳"},
+              {"task": "Status notifications", "status": "⏳"},
+              {"task": "Claims reporting", "status": "⏳"}
+            ]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_2",
+        "name": "ADVANCED FEATURES",
+        "status": "PENDING",
+        "duration": "3-4 Minggu",
+        "stages": [
+          {
+            "stage_id": "stage_2_1",
+            "name": "Financial Module",
+            "duration": "Minggu 3",
+            "status": "⏳",
+            "tasks": ["Premium collection", "Commission calculation", "Payment tracking", "Invoicing system", "Financial reports", "Tax calculation"]
+          },
+          {
+            "stage_id": "stage_2_2",
+            "name": "Reporting & Analytics",
+            "duration": "Minggu 3-4",
+            "status": "⏳",
+            "tasks": ["Dashboard analytics", "Policy performance reports", "Sales reports", "Client reports", "Export to PDF/Excel", "Custom report builder"]
+          },
+          {
+            "stage_id": "stage_2_3",
+            "name": "Communication Module",
+            "duration": "Minggu 4",
+            "status": "⏳",
+            "tasks": ["Email notifications", "SMS integration", "Document generation", "Reminder system", "Announcement board", "Internal messaging"]
+          },
+          {
+            "stage_id": "stage_2_4",
+            "name": "Calendar & Task Management",
+            "duration": "Minggu 4",
+            "status": "⏳",
+            "tasks": ["Policy renewal calendar", "Task assignment", "Reminders & notifications", "Meeting scheduler", "Follow-up system"]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_3",
+        "name": "SECURITY & COMPLIANCE",
+        "status": "PENDING",
+        "duration": "1-2 Minggu",
+        "stages": [
+          {
+            "stage_id": "stage_3_1",
+            "name": "Security Features",
+            "duration": "Minggu 5",
+            "status": "⏳",
+            "tasks": ["Audit logging", "Role-based permissions", "Data encryption", "IP whitelisting", "Session timeout", "Backup system"]
+          },
+          {
+            "stage_id": "stage_3_2",
+            "name": "Compliance Features",
+            "duration": "Minggu 5",
+            "status": "⏳",
+            "tasks": ["Compliance checklist", "Regulatory reporting", "Document retention", "KYC/AML features", "Audit trail"]
+          },
+          {
+            "stage_id": "stage_3_3",
+            "name": "Settings & Configuration",
+            "duration": "Minggu 5-6",
+            "status": "⏳",
+            "tasks": ["User management", "System settings", "Email templates", "Notification settings", "API configuration", "Backup settings"]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_4",
+        "name": "INTEGRATION & API",
+        "status": "PENDING",
+        "duration": "2-3 Minggu",
+        "stages": [
+          {
+            "stage_id": "stage_4_1",
+            "name": "Backend Development",
+            "duration": "Minggu 6-7",
+            "status": "⏳",
+            "tasks": ["Database design (MySQL/PostgreSQL)", "REST API development", "Authentication API", "Policy API", "Client API", "Reports API"]
+          },
+          {
+            "stage_id": "stage_4_2",
+            "name": "Third-party Integrations",
+            "duration": "Minggu 7-8",
+            "status": "⏳",
+            "tasks": ["Payment gateway (Midtrans/Xendit)", "Email service (SendGrid/Mailgun)", "SMS gateway", "Document signing (Dokobit/Adobe Sign)", "Cloud storage (AWS S3/Google Cloud)"]
+          },
+          {
+            "stage_id": "stage_4_3",
+            "name": "Mobile Responsive",
+            "duration": "Minggu 8",
+            "status": "⏳",
+            "tasks": ["Mobile-first design", "Progressive Web App (PWA)", "Offline capabilities", "Push notifications"]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_5",
+        "name": "TESTING & DEPLOYMENT",
+        "status": "PENDING",
+        "duration": "1-2 Minggu",
+        "stages": [
+          {
+            "stage_id": "stage_5_1",
+            "name": "Quality Assurance",
+            "duration": "Minggu 9",
+            "status": "⏳",
+            "tasks": ["Unit testing", "Integration testing", "User acceptance testing (UAT)", "Performance testing", "Security testing", "Cross-browser testing"]
+          },
+          {
+            "stage_id": "stage_5_2",
+            "name": "Documentation",
+            "duration": "Minggu 9",
+            "status": "⏳",
+            "tasks": ["User manual", "Admin guide", "API documentation", "Deployment guide", "Troubleshooting guide"]
+          },
+          {
+            "stage_id": "stage_5_3",
+            "name": "Deployment Preparation",
+            "duration": "Minggu 10",
+            "status": "⏳",
+            "tasks": ["Production environment setup", "Database migration", "SSL certificate", "Domain configuration", "Backup strategy", "Monitoring setup"]
+          }
+        ]
+      },
+      {
+        "phase_id": "phase_6",
+        "name": "LAUNCH & POST-LAUNCH",
+        "status": "PENDING",
+        "duration": "Ongoing",
+        "stages": [
+          {
+            "stage_id": "stage_6_1",
+            "name": "Launch Phase",
+            "duration": "Week 11",
+            "status": "⏳",
+            "tasks": ["Soft launch (beta testing)", "Training sessions", "Feedback collection", "Bug fixing", "Performance optimization"]
+          },
+          {
+            "stage_id": "stage_6_2",
+            "name": "Post-Launch Support",
+            "duration": "Ongoing",
+            "status": "⏳",
+            "tasks": ["User support system", "Regular updates", "Feature enhancements", "Security patches", "Performance monitoring"]
+          },
+          {
+            "stage_id": "stage_6_3",
+            "name": "Future Roadmap (Phase 2)",
+            "duration": "Future",
+            "status": "⏳",
+            "tasks": ["Mobile apps (iOS/Android)", "AI-powered recommendations", "Chatbot integration", "Advanced analytics", "Marketplace features", "Multi-language support"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "sprint_planning": {
+    "current_sprint": "Sprint 1",
+    "duration": "2 Minggu",
+    "sprints": [
+      {
+        "sprint_id": "sprint_1",
+        "name": "Dashboard & Policy Management",
+        "week": "Minggu 1",
+        "days": [
+          {"day": "Hari 1-2", "task": "Complete dashboard-admin.html"},
+          {"day": "Hari 3-4", "task": "Client Management Module"},
+          {"day": "Hari 5", "task": "Claims Management basic"},
+          {"day": "Hari 6-7", "task": "Integration testing"}
+        ],
+        "deliverables": [
+          {"item": "Login system dengan 7 role", "status": "✅"},
+          {"item": "Dashboard user & admin", "status": "✅"},
+          {"item": "My Policies CRUD", "status": "✅"},
+          {"item": "Client Management", "status": "🎯"},
+          {"item": "Basic Claims system", "status": "🎯"}
+        ]
+      },
+      {
+        "sprint_id": "sprint_2",
+        "name": "Core Business Logic",
+        "week": "Minggu 2",
+        "days": [
+          {"day": "Hari 8-9", "task": "Financial Module (Premium & Commission)"},
+          {"day": "Hari 10-11", "task": "Reporting System"},
+          {"day": "Hari 12-13", "task": "Communication Module"},
+          {"day": "Hari 14", "task": "UAT & Bug Fixes"}
+        ],
+        "deliverables": [
+          {"item": "Financial calculations", "status": "🎯"},
+          {"item": "Basic reporting", "status": "🎯"},
+          {"item": "Email notifications", "status": "🎯"},
+          {"item": "Calendar integration", "status": "🎯"}
+        ]
+      },
+      {
+        "sprint_id": "sprint_3",
+        "name": "Security & Integration",
+        "week": "Minggu 3-4",
+        "deliverables": [
+          {"item": "Security features", "status": "🔄"},
+          {"item": "Compliance module", "status": "🔄"},
+          {"item": "Backend API", "status": "🔄"},
+          {"item": "Mobile responsive", "status": "🔄"}
+        ]
+      }
+    ]
+  },
+
+  "team_structure": {
+    "minimum_team": [
+      {"role": "Frontend Developer", "responsibility": "UI/UX, JavaScript", "current": "✓ (Anda)"},
+      {"role": "Backend Developer", "responsibility": "API, Database", "current": "Optional (bisa fullstack)"},
+      {"role": "QA Tester", "responsibility": "Testing", "current": "Bisa dikombinasikan"},
+      {"role": "Project Manager", "responsibility": "Project management", "current": "✓ (Anda)"}
+    ]
+  },
+
+  "risk_management": {
+    "high_risks": [
+      {"risk": "Scope creep", "mitigation": "Tetap fokus pada MVP"},
+      {"risk": "Technical debt", "mitigation": "Regular refactoring"},
+      {"risk": "Security vulnerabilities", "mitigation": "Audit berkala"}
+    ],
+    "mitigation_strategies": [
+      "Sprint planning ketat",
+      "Code review setiap feature",
+      "Security testing terintegrasi"
+    ]
+  },
+
+  "success_metrics": {
+    "technical_metrics": [
+      {"metric": "Page load time", "target": "< 3 detik"},
+      {"metric": "Uptime", "target": "99.9%"},
+      {"metric": "Critical bugs in production", "target": "Zero"},
+      {"metric": "Security audit", "target": "Passed"}
+    ],
+    "business_metrics": [
+      {"metric": "User adoption rate", "target": "> 80%"},
+      {"metric": "Customer satisfaction", "target": "> 4.5/5"},
+      {"metric": "Processing time reduction", "target": "60%"},
+      {"metric": "Policy sales increase", "target": "30%"}
+    ]
+  },
+
+  "action_plan": {
+    "today": [
+      "Selesaikan dashboard-admin.html - Template untuk super admin",
+      "Setup database design - Skema tabel utama",
+      "Create client management page - CRUD clients"
+    ],
+    "this_month": [
+      "Sprint 1 completion - Core modules ready",
+      "MVP ready - Basic system operational",
+      "Beta testing - 5-10 pilot users"
+    ],
+    "three_months": [
+      "Production launch - Full system live",
+      "User training - Onboarding sessions",
+      "Feedback iteration - Continuous improvement"
+    ]
+  },
+
+  "motto": "Ship Early, Iterate Often, Deliver Value",
+
+  "development_guidelines": {
+    "file_structure": {
+      "root_files": ["index.html", "login.html", "dashboard.html", "dashboard-admin.html", ".htaccess"],
+      "modules": ["payments/", "policies/", "clients/", "claims/", "admin/", "reports/"],
+      "assets": ["css/", "js/", "images/"],
+      "components": ["components/navbar.html", "components/footer.html"]
+    },
+    "coding_standards": {
+      "html": "Semantic HTML5 dengan Tailwind CSS classes",
+      "javascript": "ES6+ dengan modular structure",
+      "naming_convention": "kebab-case untuk files, camelCase untuk variables",
+      "comments": "Document semua fungsi utama"
+    },
+    "testing_requirements": [
+      "Setiap module harus memiliki basic functionality test",
+      "Cross-browser compatibility (Chrome, Firefox, Safari)",
+      "Mobile responsive testing"
+    ]
+  },
+
+  "status_codes": {
+    "✅": "COMPLETED",
+    "🔄": "IN PROGRESS",
+    "⏳": "PENDING",
+    "🎯": "CURRENT FOCUS",
+    "⚠️": "NEEDS ATTENTION",
+    "🚫": "BLOCKED"
+  },
+
+  "instructions_for_ai": {
+    "when_asked_about": "project_status",
+    "response_format": "Berikan status berdasarkan phase_id, stage_id, dan status terkini",
+    
+    "when_asked_about": "next_tasks",
+    "response_format": "Rekomendasikan task berdasarkan priority dan dependencies",
+    
+    "when_asked_about": "code_implementation",
+    "response_format": "Berdasarkan stage yang sedang aktif, berikan code yang sesuai dengan tech stack",
+    
+    "when_asked_about": "architecture",
+    "response_format": "Gunakan file_structure dan development_guidelines sebagai acuan",
+    
+    "when_asked_about": "bug_fixes",
+    "response_format": "Prioritaskan berdasarkan impact dan phase yang sedang aktif"
+  },
+
+  "timestamp": "2024-01-15T10:00:00Z",
+  "last_updated": "2024-01-15T10:00:00Z",
+  "version": "1.0"
+}
