@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold text-blue-900">GIBSYSNET</h1>
-                        <p class="text-xs text-gray-600">Insurance Broker System</p>
+                        <p class="text-xs text-gray-600">Comprehensive Geneneral Insurance Broker System</p>
                     </div>
                 </div>
                 
@@ -70,7 +70,6 @@
             </p>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
                     <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-file-contract text-blue-600 text-2xl"></i>
@@ -81,7 +80,6 @@
                     </p>
                 </div>
                 
-                <!-- Feature 2 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
                     <div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-chart-bar text-green-600 text-2xl"></i>
@@ -92,7 +90,6 @@
                     </p>
                 </div>
                 
-                <!-- Feature 3 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
                     <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-user-shield text-purple-600 text-2xl"></i>
@@ -185,13 +182,41 @@
                 </div>
                 
                 <div class="text-center md:text-right">
-                    <p class="text-blue-200">© 2025 GIBSYSNET. All rights reserved.</p>
+                    <p class="text-blue-200">© <span data-current-year>2025</span> GIBSYSNET. All rights reserved.</p>
                     <p class="text-blue-200 text-sm mt-2">General Insurance Broker System Network</p>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- Load JavaScript Files -->
+    <script src="assets/js/api.js"></script>
     <script src="assets/js/main.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script>
+        // Initialize landing page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('GIBSYSNET Landing Page loaded');
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -148,6 +148,14 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+            <p class="text-gray-700">Memuat data...</p>
+        </div>
+    </div>
+
     <!-- Dashboard Grid Container -->
     <div class="dashboard-grid">
         <!-- Menu Bar -->
@@ -180,7 +188,7 @@
                                     <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
                                 </a>
                                 <div class="border-t my-1"></div>
-                                <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-red-50 text-red-600">
+                                <a href="#" onclick="handleLogout()" class="block px-4 py-2 hover:bg-red-50 text-red-600">
                                     <i class="fas fa-power-off mr-2"></i>Exit
                                 </a>
                             </div>
@@ -210,7 +218,7 @@
                                     <i class="fas fa-money-bill-wave mr-2"></i>Currency
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-exclamation-triangle mr-2"></i>Default Quotation
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>Default Oxidation
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-chart-line mr-2"></i>Model Risks
@@ -228,7 +236,7 @@
                                     <i class="fas fa-object-group mr-2"></i>Object Group
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-hand-holding-usd mr-2"></i>Commission
+                                    <i class="fas fa-hand-holding-usd mr-2"></i>Contribution
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-bullseye mr-2"></i>Production Target
@@ -251,28 +259,22 @@
                                     <i class="fas fa-edit mr-2"></i>Quotation Registration
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-search mr-2"></i>Renewal Quotation
+                                    <i class="fas fa-search mr-2"></i>Retrieval Quotation
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-gem mr-2"></i>Endorsment Quotation
+                                    <i class="fas fa-gem mr-2"></i>Endowment Quotation
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-times-circle mr-2"></i>Closed Quotations
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-window-maximize mr-2"></i>Unclosed Quotation
+                                    <i class="fas fa-window-maximize mr-2"></i>Windowed Quotation
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-undo mr-2"></i>Rollback Quotation
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-circle mr-2"></i>Note
-                                </a>
-                                  <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-circle mr-2"></i>Log on Excel
-                                </a>
-                                  <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-circle mr-2"></i>upload Excel
+                                    <i class="fas fa-circle mr-2"></i>Node
                                 </a>
                             </div>
                         </div>
@@ -288,17 +290,14 @@
                                 <a href="reports.html" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-chart-line mr-2"></i>Monthly Production
                                 </a>
-                                  <a href="reports.html" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-chart-line mr-2"></i>Source Biz Production
-                                </a>
                                 <a href="reports.html?type=renewal" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-bell mr-2"></i>Renewal Reminder
                                 </a>
                                 <a href="reports.html?type=renewal-notes" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-sticky-note mr-2"></i>Renewal Notice
+                                    <i class="fas fa-sticky-note mr-2"></i>Renewal Notes
                                 </a>
                                 <a href="reports.html?type=earning" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-money-check-alt mr-2"></i>Earned - Unearned Premium
+                                    <i class="fas fa-money-check-alt mr-2"></i>Earning - Unearned Premium
                                 </a>
                             </div>
                         </div>
@@ -315,24 +314,26 @@
                                     <i class="fas fa-file-export mr-2"></i>e-Reporting
                                 </a>
                                 <a href="compliance.html?module=sipo" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-shield-alt mr-2"></i>Sippo
+                                    <i class="fas fa-shield-alt mr-2"></i>Sipo
                                 </a>
                                 <a href="compliance.html?module=symogga" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-balance-scale mr-2"></i>Sprint
+                                    <i class="fas fa-balance-scale mr-2"></i>Symogga
                                 </a>
                                 <a href="compliance.html?module=sagap" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-handshake mr-2"></i>Sigap
+                                    <i class="fas fa-handshake mr-2"></i>Sagap
                                 </a>
                                 <a href="compliance.html?module=saap" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-file-contract mr-2"></i>Siap APARI
+                                    <i class="fas fa-file-contract mr-2"></i>SaaP Apoari
                                 </a>
                                 <a href="compliance.html?module=lsppi" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-industry mr-2"></i>APPARINDO
+                                    <i class="fas fa-industry mr-2"></i>LSPPI
                                 </a>
                                 <a href="compliance.html?module=apollo" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
                                     <i class="fas fa-rocket mr-2"></i>Apollo
                                 </a>
-                               
+                                <a href="compliance.html?module=sapoari" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
+                                    <i class="fas fa-file-signature mr-2"></i>Sapoari
+                                </a>
                             </div>
                         </div>
 
@@ -362,10 +363,10 @@
                             </button>
                             <div class="menu-dropdown">
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-sign-in-alt mr-2"></i>Letter In
+                                    <i class="fas fa-sign-in-alt mr-2"></i>Log On Local
                                 </a>
                                 <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                                    <i class="fas fa-upload mr-2"></i>Letter Out
+                                    <i class="fas fa-upload mr-2"></i>Upload Local
                                 </a>
                             </div>
                         </div>
@@ -396,10 +397,13 @@
                 <div class="flex items-center space-x-4">
                     <!-- Notifications -->
                     <div class="relative">
-                        <button class="relative p-1 hover:bg-white/10 rounded-full">
+                        <button id="notificationBtn" class="relative p-1 hover:bg-white/10 rounded-full">
                             <i class="fas fa-bell text-lg"></i>
-                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                            <span id="notificationBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden">0</span>
                         </button>
+                        <div id="notificationDropdown" class="menu-dropdown right-0 mt-2 w-80 max-h-96 overflow-y-auto hidden">
+                            <!-- Notifications will be loaded here -->
+                        </div>
                     </div>
 
                     <!-- User Profile -->
@@ -411,7 +415,7 @@
                             <span id="userDisplayName" class="font-medium hidden md:inline">Admin</span>
                             <i class="fas fa-chevron-down text-xs"></i>
                         </button>
-                        <div id="userMenu" class="menu-dropdown right-0">
+                        <div id="userMenu" class="menu-dropdown right-0 w-48 hidden">
                             <div class="px-4 py-3 border-b">
                                 <p class="font-semibold text-gray-800" id="menuUserName">Administrator</p>
                                 <p class="text-sm text-gray-600" id="menuUserEmail">admin@gibsysnet.com</p>
@@ -423,7 +427,7 @@
                                 <i class="fas fa-key mr-2"></i>Change Password
                             </a>
                             <div class="border-t my-1"></div>
-                            <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-red-50 text-red-600">
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 hover:bg-red-50 text-red-600">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </a>
                         </div>
@@ -444,6 +448,7 @@
                 <div class="flex items-center space-x-6">
                     <span><i class="fas fa-calendar mr-1"></i> <span id="currentDate">Loading...</span></span>
                     <span><i class="fas fa-clock mr-1"></i> <span id="currentTime">Loading...</span></span>
+                    <span id="onlineStatus"><i class="fas fa-wifi text-green-500"></i> Online</span>
                 </div>
             </div>
         </div>
@@ -461,32 +466,32 @@
                 <div class="mb-6">
                     <h3 class="font-medium text-gray-700 text-sm uppercase mb-3">Quick Actions</h3>
                     <div class="space-y-2">
-                        <a href="#" class="menu-item active flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item active flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-tachometer-alt mr-3 text-blue-600"></i>
                             <span>Dashboard</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-file-invoice-dollar mr-3 text-green-600"></i>
                             <span>New Quotation</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-users mr-3 text-purple-600"></i>
                             <span>Client Management</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-chart-line mr-3 text-yellow-600"></i>
                             <span>Production Report</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
                             <span>Renewal Reminder</span>
                             <span class="ml-auto bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">5</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-clipboard-list mr-3 text-indigo-600"></i>
                             <span>Policy Management</span>
                         </a>
-                        <a href="#" class="menu-item flex items-center p-3 rounded-lg">
+                        <a href="#" class="menu-item flex items-center p-3 rounded-lg" onclick="setActiveNav(this)">
                             <i class="fas fa-hand-holding-usd mr-3 text-green-600"></i>
                             <span>Commission Tracking</span>
                         </a>
@@ -496,42 +501,10 @@
                 <!-- Recent Activities -->
                 <div>
                     <h3 class="font-medium text-gray-700 text-sm uppercase mb-3">Recent Activities</h3>
-                    <div class="space-y-3">
-                        <div class="bg-blue-50 p-3 rounded-lg">
-                            <div class="flex items-start">
-                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-file-contract text-blue-600 text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium">New Quotation Created</p>
-                                    <p class="text-xs text-gray-600">Q-2025-00123 for PT ABC</p>
-                                    <p class="text-xs text-gray-500 mt-1">10 minutes ago</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-green-50 p-3 rounded-lg">
-                            <div class="flex items-start">
-                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-check-circle text-green-600 text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium">Policy Issued</p>
-                                    <p class="text-xs text-gray-600">POL-2025-0456 - Marine Insurance</p>
-                                    <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-yellow-50 p-3 rounded-lg">
-                            <div class="flex items-start">
-                                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-exclamation-triangle text-yellow-600 text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium">Renewal Due</p>
-                                    <p class="text-xs text-gray-600">POL-2024-0789 expires in 15 days</p>
-                                    <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-                                </div>
-                            </div>
+                    <div id="recentActivities" class="space-y-3">
+                        <!-- Activities will be loaded here -->
+                        <div class="text-center py-4 text-gray-500">
+                            <i class="fas fa-spinner fa-spin"></i> Loading...
                         </div>
                     </div>
                 </div>
@@ -572,7 +545,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm">Total Policies</p>
-                            <h3 class="text-2xl font-bold text-gray-800">1,248</h3>
+                            <h3 class="text-2xl font-bold text-gray-800" id="totalPolicies">1,248</h3>
                             <p class="text-green-600 text-sm mt-2">
                                 <i class="fas fa-arrow-up mr-1"></i> 12% from last month
                             </p>
@@ -594,7 +567,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm">Active Clients</p>
-                            <h3 class="text-2xl font-bold text-gray-800">856</h3>
+                            <h3 class="text-2xl font-bold text-gray-800" id="totalClients">856</h3>
                             <p class="text-green-600 text-sm mt-2">
                                 <i class="fas fa-arrow-up mr-1"></i> 8% from last month
                             </p>
@@ -616,7 +589,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm">Pending Quotations</p>
-                            <h3 class="text-2xl font-bold text-gray-800">42</h3>
+                            <h3 class="text-2xl font-bold text-gray-800" id="pendingQuotations">42</h3>
                             <p class="text-red-600 text-sm mt-2">
                                 <i class="fas fa-arrow-up mr-1"></i> 3 new today
                             </p>
@@ -638,7 +611,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm">Renewals Due</p>
-                            <h3 class="text-2xl font-bold text-gray-800">18</h3>
+                            <h3 class="text-2xl font-bold text-gray-800" id="upcomingRenewals">18</h3>
                             <p class="text-yellow-600 text-sm mt-2">
                                 <i class="fas fa-clock mr-1"></i> Within 30 days
                             </p>
@@ -759,7 +732,7 @@
                         </a>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200" id="quotationsTable">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quote No</th>
@@ -769,52 +742,10 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-600">Q-2025-00130</div>
-                                        <div class="text-xs text-gray-500">Today</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">PT Global Makmur</div>
-                                        <div class="text-xs text-gray-500">Property Insurance</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">Rp 45,000,000</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 font-medium">Pending</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-600">Q-2025-00129</div>
-                                        <div class="text-xs text-gray-500">Yesterday</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">CV Sejahtera Abadi</div>
-                                        <div class="text-xs text-gray-500">Marine Insurance</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">Rp 28,500,000</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">Approved</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-600">Q-2025-00128</div>
-                                        <div class="text-xs text-gray-500">2 days ago</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">PT Anugrah Jaya</div>
-                                        <div class="text-xs text-gray-500">Liability Insurance</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">Rp 67,200,000</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 font-medium">Processing</span>
+                                <!-- Data will be loaded here -->
+                                <tr>
+                                    <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading data...
                                     </td>
                                 </tr>
                             </tbody>
@@ -827,60 +758,25 @@
                     <div class="px-5 py-4 border-b flex justify-between items-center">
                         <h3 class="font-bold text-gray-800">Renewal Reminders</h3>
                         <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            View All <i class="fas fa-arrow-right ml-1"></i>
+                            View All
                         </a>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200" id="renewalsTable">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Policy No</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry Date</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days Left</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-600">POL-2024-0456</div>
-                                        <div class="text-xs text-gray-500">Property</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">PT Sinar Jaya</div>
-                                        <div class="text-xs text-gray-500">Premium: Rp 25M</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">Aug 15, 2025</div>
-                                        <div class="text-xs text-gray-500">
-                                            <span class="text-red-600 font-medium">19 days left</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 bg-blue-50 rounded-lg">
-                                            <i class="fas fa-sync-alt mr-1"></i> Renew
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-600">POL-2024-0789</div>
-                                        <div class="text-xs text-gray-500">Marine</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">CV Mandiri Sejahtera</div>
-                                        <div class="text-xs text-gray-500">Premium: Rp 50M</div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="font-medium">Aug 30, 2025</div>
-                                        <div class="text-xs text-gray-500">
-                                            <span class="text-yellow-600 font-medium">34 days left</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 bg-blue-50 rounded-lg">
-                                            <i class="fas fa-sync-alt mr-1"></i> Renew
-                                        </button>
+                                <!-- Data will be loaded here -->
+                                <tr>
+                                    <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading data...
                                     </td>
                                 </tr>
                             </tbody>
@@ -891,61 +787,95 @@
         </div>
     </div>
 
-    <!-- Dashboard JavaScript -->
+    <!-- Load JavaScript Files -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <!-- Dashboard Admin Specific JavaScript -->
     <script>
         // User data from localStorage
-        const userData = JSON.parse(localStorage.getItem('gibsysnet_user'));
+        let userData = null;
         
         // Check if user is logged in
-        if (!userData) {
+        if (!window.Auth || !window.Auth.isLoggedIn()) {
             window.location.href = 'login.html';
+        } else {
+            userData = window.Auth.getUser();
         }
 
         // Update user information in dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update user info
-            document.getElementById('userInitial').textContent = userData.full_name.charAt(0);
+        function updateUserInfo() {
+            if (!userData) return;
+            
+            const initials = userData.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            // Update all instances of user info
+            document.getElementById('userInitial').textContent = initials.charAt(0);
             document.getElementById('userDisplayName').textContent = userData.full_name;
             document.getElementById('menuUserName').textContent = userData.full_name;
             document.getElementById('menuUserEmail').textContent = userData.email;
             document.getElementById('userId').textContent = `ID: ${userData.user_id}`;
             document.getElementById('userFullName').textContent = `User Name: ${userData.full_name}`;
             document.getElementById('userLevel').textContent = `Level: ${userData.user_level.toUpperCase()}`;
-            document.getElementById('greetingName').textContent = `Welcome back, ${userData.full_name.split(' ')[0]}!`;
             
-            // Update date and time
-            function updateDateTime() {
-                const now = new Date();
-                const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-                const timeOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                
-                document.getElementById('currentDate').textContent = 
-                    now.toLocaleDateString('en-US', dateOptions);
-                document.getElementById('currentTime').textContent = 
-                    now.toLocaleTimeString('en-US', timeOptions);
-            }
+            // Update greeting
+            const hour = new Date().getHours();
+            let greeting = 'Selamat';
+            if (hour < 12) greeting = 'Selamat pagi';
+            else if (hour < 15) greeting = 'Selamat siang';
+            else if (hour < 18) greeting = 'Selamat sore';
+            else greeting = 'Selamat malam';
             
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-            
-            // Initialize dropdown menus
-            initializeDropdowns();
-            
-            // Initialize sidebar menu active state
-            initializeSidebarMenu();
-        });
+            document.getElementById('greetingName').textContent = `${greeting}, ${userData.full_name.split(' ')[0]}!`;
+        }
 
-        // Dropdown menu functionality
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('id-ID', dateOptions);
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleTimeString('id-ID', timeOptions);
+        }
+
+        // Initialize dropdown menus
         function initializeDropdowns() {
             const menuButtons = document.querySelectorAll('.menu-btn');
             const userMenuBtn = document.getElementById('userMenuBtn');
             const userMenu = document.getElementById('userMenu');
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
             
             // Toggle user menu
-            userMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userMenu.classList.toggle('show');
-            });
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userMenu.classList.toggle('show');
+                    notificationDropdown.classList.remove('show');
+                });
+            }
+            
+            // Toggle notification menu
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                    userMenu.classList.remove('show');
+                });
+            }
             
             // Toggle other menus
             menuButtons.forEach(button => {
@@ -987,27 +917,60 @@
             });
         }
 
+        // Set active navigation item
+        function setActiveNav(element) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            element.classList.add('active');
+        }
+
         // Logout function
-        function logout() {
+        async function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('gibsysnet_user');
-                localStorage.removeItem('gibsysnet_token');
-                window.location.href = 'login.html';
+                if (window.Auth) {
+                    await window.Auth.logout(true);
+                } else {
+                    localStorage.removeItem('gibsysnet_user');
+                    localStorage.removeItem('gibsysnet_token');
+                    window.location.href = 'login.html';
+                }
             }
         }
 
-        // Demo data for charts (would be replaced with real data)
-        function loadDashboardData() {
-            // Simulate loading data
-            setTimeout(() => {
-                console.log('Dashboard data loaded for user:', userData.username);
-            }, 1000);
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                if (window.loadDashboardData) {
+                    await window.loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
         }
 
-        // Load dashboard data on page load
-        window.onload = function() {
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update user info
+            updateUserInfo();
+            
+            // Update date time
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Initialize UI components
+            initializeDropdowns();
+            initializeSidebarMenu();
+            
+            // Load dashboard data
             loadDashboardData();
-        };
+            
+            // Auto-refresh every 5 minutes
+            setInterval(loadDashboardData, 5 * 60 * 1000);
+        });
 
         // Handle window resize for responsive design
         window.addEventListener('resize', function() {
