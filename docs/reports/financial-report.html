@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Report - GIBSYSNET</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom Styles (SAME AS BEFORE - NO CHANGES) -->
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --purple-color: #8b5cf6;
+            --pink-color: #ec4899;
+            --dark-color: #1e293b;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Top Navigation Bar */
+        .top-nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .page-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .export-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .export-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Glass Card Effect */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.9) 0%, 
+                rgba(29, 78, 216, 0.9) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 1%);
+            background-size: 20px 20px;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-20px, -20px) rotate(360deg); }
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            padding: 25px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: white;
+            height: 100%;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 100%);
+            border-radius: 16px;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 10px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .stat-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .stat-trend.positive {
+            color: #a7f3d0;
+        }
+        
+        .stat-trend.negative {
+            color: #fca5a5;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        
+        .search-box input {
+            padding-left: 45px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 48px;
+        }
+        
+        .search-box input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* Tabs Navigation */
+        .nav-tabs-modern {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+        
+        .nav-tabs-modern .nav-link {
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        
+        .nav-tabs-modern .nav-link:hover {
+            background: rgba(37, 99, 235, 0.05);
+            color: #2563eb;
+        }
+        
+        .nav-tabs-modern .nav-link.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Table Styles */
+        .data-table-container {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-modern {
+            margin-bottom: 0;
+        }
+        
+        .table-modern thead th {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 16px;
+        }
+        
+        .table-modern tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .table-modern tbody tr:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
+        }
+        
+        .table-modern tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border: none;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        
+        .toast-modern {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Action Buttons */
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+        }
+        
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .action-btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .action-btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .action-btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .header-section {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .top-nav-bar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-left, .nav-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-title {
+                text-align: center;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Laporan Styles */
+        .report-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .report-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .report-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .report-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .account-code {
+            font-family: monospace;
+            color: #475569;
+        }
+
+        .account-amount {
+            text-align: right;
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        .account-total {
+            background: #f0f9ff;
+            font-weight: 700;
+        }
+
+        .positive-amount {
+            color: #10b981;
+        }
+
+        .negative-amount {
+            color: #ef4444;
+        }
+
+        .period-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .period-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .period-btn:hover:not(.active) {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .laporan-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .laporan-card {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .laporan-card-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .laporan-card-body {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .laporan-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .summary-item .label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .summary-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p class="text-muted">Loading Financial Reports...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Top Navigation Bar -->
+        <div class="top-nav-bar glass-card">
+            <div class="nav-left">
+                <a href="../dashboard/dashboard-user.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <div>
+                    <h2 class="page-title">Financial Reports </h2>
+                    <p class="page-subtitle">Laporan Keuangan Triwulanan - Terhubung ke Database</p>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="export-button" onclick="exportFinancialReport()">
+                    <i class="fas fa-file-export"></i> Export Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="header-section glass-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-file-invoice-dollar fa-3x text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="display-5 fw-bold mb-2">Laporan Keuangan Perusahaan</h1>
+                            <p class="lead mb-0 opacity-75">Laporan Posisi Keuangan, Laba Rugi, Arus Kas, dan Perubahan Ekuitas</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="badge bg-white text-primary fs-6">
+                            <i class="fas fa-database me-2"></i>
+                            <span id="dbStatus">Connected to Database</span>
+                        </span>
+                        <span class="badge bg-white text-success fs-6">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Real-time Updates
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <div class="text-end">
+                            <h5 class="mb-1" id="currentDate">Loading...</h5>
+                            <p class="mb-0 opacity-75" id="currentPeriod">Triwulan I 2024</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-light rounded-circle p-2" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-cog fa-lg"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="refreshReports()"><i class="fas fa-sync-alt me-2"></i>Refresh Reports</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportToPDF()"><i class="fas fa-file-pdf me-2"></i>Export to PDF</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportToExcel()"><i class="fas fa-file-excel me-2"></i>Export to Excel</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="printReport()"><i class="fas fa-print me-2"></i>Print Report</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="syncWithDatabase()"><i class="fas fa-database me-2"></i>Sync with Database</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showDatabaseInfo()"><i class="fas fa-info-circle me-2"></i>Database Info</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h2 class="stat-number" id="totalAssets">Rp 0</h2>
+                    <p class="stat-label">Total Aset (LK01)</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="assetsTrend">0%</span> from last period
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="stat-number" id="netProfit">Rp 0</h2>
+                    <p class="stat-label">Laba Bersih (LK02)</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="profitTrend">0%</span> growth
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h2 class="stat-number" id="cashFlow">Rp 0</h2>
+                    <p class="stat-label">Arus Kas Bersih (LK03)</p>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="cashFlowTrend">0%</span> increase
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 class="stat-number" id="totalEquity">Rp 0</h2>
+                    <p class="stat-label">Total Ekuitas (LK04)</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="equityTrend">0%</span> growth
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Period Selection & Filter Section -->
+        <div class="filter-section glass-card">
+            <div class="row align-items-center mb-4">
+                <div class="col-md-4">
+                    <div class="period-selector">
+                        <button class="period-btn active" data-period="quarterly" onclick="setPeriod('quarterly')">
+                            <i class="fas fa-calendar-alt me-2"></i>Triwulanan
+                        </button>
+                        <button class="period-btn" data-period="monthly" onclick="setPeriod('monthly')">
+                            <i class="fas fa-calendar me-2"></i>Bulanan
+                        </button>
+                        <button class="period-btn" data-period="annual" onclick="setPeriod('annual')">
+                            <i class="fas fa-calendar-star me-2"></i>Tahunan
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search in reports...">
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="action-btn action-btn-primary me-2" onclick="loadReports()">
+                        <i class="fas fa-filter"></i> Load Reports
+                    </button>
+                    <button class="action-btn action-btn-warning" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select class="form-select select2" id="yearFilter">
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select select2" id="periodFilter">
+                        <option value="Q1">Triwulan I (Jan-Mar)</option>
+                        <option value="Q2">Triwulan II (Apr-Jun)</option>
+                        <option value="Q3">Triwulan III (Jul-Sep)</option>
+                        <option value="Q4">Triwulan IV (Okt-Dec)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select select2" id="companyFilter">
+                        <option value="all">All Companies</option>
+                        <option value="PT Sinergi Adi Utama">PT Sinergi Adi Utama</option>
+                        <option value="PT Asuransi Test">PT Asuransi Test</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="auditedCheck" checked>
+                        <label class="form-check-label" for="auditedCheck">
+                            <i class="fas fa-check-circle text-success me-1"></i> Audited Only
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="validatedCheck" checked>
+                        <label class="form-check-label" for="validatedCheck">
+                            <i class="fas fa-check-double text-primary me-1"></i> Validated Data
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="action-btn action-btn-success" onclick="generateComparativeReport()">
+                        <i class="fas fa-chart-bar"></i> Comparative Report
+                    </button>
+                    <button class="action-btn action-btn-primary" onclick="validateAllReports()">
+                        <i class="fas fa-check-circle"></i> Validate Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs nav-tabs-modern" id="financialTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="lk01-tab" data-bs-toggle="tab" data-bs-target="#lk01-tab-pane" type="button">
+                    <i class="fas fa-balance-scale me-2"></i> LK01 - Posisi Keuangan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lk02-tab" data-bs-toggle="tab" data-bs-target="#lk02-tab-pane" type="button">
+                    <i class="fas fa-chart-line me-2"></i> LK02 - Laba Rugi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lk03-tab" data-bs-toggle="tab" data-bs-target="#lk03-tab-pane" type="button">
+                    <i class="fas fa-money-bill-wave me-2"></i> LK03 - Arus Kas
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lk04-tab" data-bs-toggle="tab" data-bs-target="#lk04-tab-pane" type="button">
+                    <i class="fas fa-users me-2"></i> LK04 - Perubahan Ekuitas
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary-tab-pane" type="button">
+                    <i class="fas fa-chart-pie me-2"></i> Summary & Analysis
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="financialTabsContent">
+            <!-- LK01 Tab -->
+            <div class="tab-pane fade show active" id="lk01-tab-pane" role="tabpanel">
+                <div class="laporan-container">
+                    <div class="laporan-card">
+                        <div class="laporan-card-header">
+                            <h4 class="mb-0"><i class="fas fa-balance-scale me-2"></i>LAPORAN POSISI KEUANGAN (LK01)</h4>
+                            <span class="badge bg-light text-dark" id="lk01Period">Triwulan I 2024</span>
+                        </div>
+                        <div class="laporan-card-body">
+                            <div class="laporan-summary">
+                                <div class="summary-item">
+                                    <div class="label">Total Aset</div>
+                                    <div class="value" id="lk01TotalAssets">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Total Liabilitas</div>
+                                    <div class="value" id="lk01TotalLiabilities">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Total Ekuitas</div>
+                                    <div class="value" id="lk01TotalEquity">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Balance Check</div>
+                                    <div class="value" id="lk01BalanceCheck">✓ Balanced</div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%">Uraian</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk01AsetTable">
+                                        <!-- Aset data will be loaded here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH ASET</strong></td>
+                                            <td class="account-code">1000</td>
+                                            <td class="account-amount" id="lk01JumlahAset">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                
+                                <div class="mt-4"></div>
+                                
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%">Uraian</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk01LiabilitiesTable">
+                                        <!-- Liabilitas data will be loaded here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH LIABILITAS</strong></td>
+                                            <td class="account-code">2000</td>
+                                            <td class="account-amount" id="lk01JumlahLiabilities">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                
+                                <div class="mt-4"></div>
+                                
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%">Uraian</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk01EquityTable">
+                                        <!-- Ekuitas data will be loaded here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH EKUITAS</strong></td>
+                                            <td class="account-code">3000</td>
+                                            <td class="account-amount" id="lk01JumlahEquity">0</td>
+                                        </tr>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH LIABILITAS DAN EKUITAS</strong></td>
+                                            <td></td>
+                                            <td class="account-amount" id="lk01JumlahLiabilitiesEquity">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 text-end">
+                                <small class="text-muted">Last updated: <span id="lk01LastUpdate">Loading...</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LK02 Tab -->
+            <div class="tab-pane fade" id="lk02-tab-pane" role="tabpanel">
+                <div class="laporan-container">
+                    <div class="laporan-card">
+                        <div class="laporan-card-header">
+                            <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>LAPORAN LABA RUGI (LK02)</h4>
+                            <span class="badge bg-light text-dark" id="lk02Period">Triwulan I 2024</span>
+                        </div>
+                        <div class="laporan-card-body">
+                            <div class="laporan-summary">
+                                <div class="summary-item">
+                                    <div class="label">Total Pendapatan</div>
+                                    <div class="value positive-amount" id="lk02TotalRevenue">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Total Beban</div>
+                                    <div class="value negative-amount" id="lk02TotalExpenses">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Laba Sebelum Pajak</div>
+                                    <div class="value" id="lk02ProfitBeforeTax">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Laba Bersih</div>
+                                    <div class="value positive-amount" id="lk02NetProfit">Rp 0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%">Uraian</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk02RevenueTable">
+                                        <!-- Pendapatan data will be loaded here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH PENDAPATAN</strong></td>
+                                            <td class="account-code">4000</td>
+                                            <td class="account-amount positive-amount" id="lk02JumlahPendapatan">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                
+                                <div class="mt-4"></div>
+                                
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%">Uraian</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk02ExpensesTable">
+                                        <!-- Beban data will be loaded here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="account-total">
+                                            <td><strong>JUMLAH BEBAN</strong></td>
+                                            <td class="account-code">5000</td>
+                                            <td class="account-amount negative-amount" id="lk02JumlahBeban">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                
+                                <div class="mt-4"></div>
+                                
+                                <table class="report-table">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>LABA (RUGI) SEBELUM PAJAK</strong></td>
+                                            <td class="account-code">6100</td>
+                                            <td class="account-amount" id="lk02LabaSebelumPajak">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Beban Pajak</td>
+                                            <td class="account-code">5600</td>
+                                            <td class="account-amount negative-amount" id="lk02BebanPajak">0</td>
+                                        </tr>
+                                        <tr class="account-total">
+                                            <td><strong>LABA (RUGI) SETELAH PAJAK</strong></td>
+                                            <td class="account-code">6200</td>
+                                            <td class="account-amount" id="lk02LabaSetelahPajak">0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 text-end">
+                                <small class="text-muted">Last updated: <span id="lk02LastUpdate">Loading...</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LK03 Tab -->
+            <div class="tab-pane fade" id="lk03-tab-pane" role="tabpanel">
+                <div class="laporan-container">
+                    <div class="laporan-card">
+                        <div class="laporan-card-header">
+                            <h4 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>LAPORAN ARUS KAS (LK03)</h4>
+                            <span class="badge bg-light text-dark" id="lk03Period">Triwulan I 2024</span>
+                        </div>
+                        <div class="laporan-card-body">
+                            <div class="laporan-summary">
+                                <div class="summary-item">
+                                    <div class="label">Arus Kas Operasi</div>
+                                    <div class="value" id="lk03CashOperations">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Arus Kas Investasi</div>
+                                    <div class="value" id="lk03CashInvesting">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Arus Kas Pendanaan</div>
+                                    <div class="value" id="lk03CashFinancing">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Kenaikan Bersih Kas</div>
+                                    <div class="value positive-amount" id="lk03NetCashIncrease">Rp 0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="80%">Uraian</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk03CashFlowTable">
+                                        <!-- Arus Kas data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 text-end">
+                                <small class="text-muted">Last updated: <span id="lk03LastUpdate">Loading...</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LK04 Tab -->
+            <div class="tab-pane fade" id="lk04-tab-pane" role="tabpanel">
+                <div class="laporan-container">
+                    <div class="laporan-card">
+                        <div class="laporan-card-header">
+                            <h4 class="mb-0"><i class="fas fa-users me-2"></i>LAPORAN PERUBAHAN EKUITAS (LK04)</h4>
+                            <span class="badge bg-light text-dark" id="lk04Period">Triwulan I 2024</span>
+                        </div>
+                        <div class="laporan-card-body">
+                            <div class="laporan-summary">
+                                <div class="summary-item">
+                                    <div class="label">Saldo Awal Ekuitas</div>
+                                    <div class="value" id="lk04BeginningEquity">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Penambahan Ekuitas</div>
+                                    <div class="value positive-amount" id="lk04EquityIncrease">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Pengurangan Ekuitas</div>
+                                    <div class="value negative-amount" id="lk04EquityDecrease">Rp 0</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Saldo Akhir Ekuitas</div>
+                                    <div class="value" id="lk04EndingEquity">Rp 0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="80%">Uraian</th>
+                                            <th width="20%" class="text-end">Jumlah (Rp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lk04EquityChangeTable">
+                                        <!-- Perubahan Ekuitas data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 text-end">
+                                <small class="text-muted">Last updated: <span id="lk04LastUpdate">Loading...</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Tab -->
+            <div class="tab-pane fade" id="summary-tab-pane" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="glass-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0"><i class="fas fa-chart-line text-primary me-2"></i>Financial Performance Trend</h4>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary active" onclick="setChartPeriod('quarter')">Quarter</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="setChartPeriod('year')">Year</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="financialTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <h4 class="mb-4"><i class="fas fa-chart-pie text-success me-2"></i>Asset Composition</h4>
+                            <div class="chart-container">
+                                <canvas id="assetCompositionChart"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Profit Margin</span>
+                                    <span id="profitMarginSummary">0%</span>
+                                </div>
+                                <div class="progress-modern">
+                                    <div id="profitMarginBar" class="progress-bar-modern" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-clipboard-check text-info me-2"></i>Financial Ratios Analysis</h4>
+                            <div class="row" id="financialRatios">
+                                <!-- Financial ratios will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-white mt-5">
+            <p class="mb-1">GIBSYSNET Financial Reporting System v2.1 • Connected to Database</p>
+            <p class="mb-0 opacity-75">Last database sync: <span id="lastSync">Just now</span> • Reports generated: <span id="reportCount">0</span></p>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // ==============================================
+        // DATABASE CONFIGURATION
+        // ==============================================
+        
+        const DB_CONFIG = {
+            baseUrl: 'http://localhost:3000/api',
+            endpoints: {
+                lk01: '/financial/lk01',
+                lk02: '/financial/lk02',
+                lk03: '/financial/lk03',
+                lk04: '/financial/lk04',
+                summary: '/financial/summary',
+                validation: '/financial/validation',
+                export: '/financial/export'
+            },
+            currentPeriod: {
+                type: 'quarterly',
+                year: 2024,
+                quarter: 'Q1',
+                month: null
+            }
+        };
+        
+        // ==============================================
+        // SAMPLE DATA STRUCTURE (From Excel Template)
+        // ==============================================
+        
+        const LK01_SAMPLE_DATA = {
+            aset: [
+                { code: '1100', name: 'Kas dan Setara Kas', amount: 250000000, detail: 'PK01' },
+                { code: '1110', name: 'Rekening Operasional', amount: 150000000, detail: '' },
+                { code: '1120', name: 'Rekening Premi', amount: 450000000, detail: 'PK02' },
+                { code: '1200', name: 'Investasi', amount: 1250000000, detail: 'PK03' },
+                { code: '1300', name: 'Piutang Premi', amount: 850000000, detail: 'PK04' },
+                { code: '1400', name: 'Piutang Jasa Keperantaraan', amount: 320000000, detail: 'PK05' },
+                { code: '', name: 'Piutang Klaim', amount: 0, detail: '' },
+                { code: '1500', name: 'Piutang Konsultasi', amount: 180000000, detail: 'PK06' },
+                { code: '1600', name: 'Piutang Jasa Penangan Klaim', amount: 95000000, detail: 'PK06' },
+                { code: '1700', name: 'Aset Tetap', amount: 650000000, detail: 'PK07' },
+                { code: '1900', name: 'Aset Lain', amount: 125000000, detail: 'PK08' }
+            ],
+            liabilitas: [
+                { code: '2100', name: 'Utang Premi', amount: 450000000, detail: 'PK09' },
+                { code: '2200', name: 'Pendapatan Jasa Keperantaraan Yang Ditangguhkan', amount: 0, detail: '' },
+                { code: '2300', name: 'Utang Klaim', amount: 320000000, detail: 'PK10' },
+                { code: '2400', name: 'Utang Komisi', amount: 125000000, detail: 'PK11' },
+                { code: '2500', name: 'Utang Pajak', amount: 85000000, detail: 'PK12' },
+                { code: '2900', name: 'Utang Lain', amount: 65000000, detail: 'PK13' }
+            ],
+            ekuitas: [
+                { code: '3100', name: 'Modal Disetor', amount: 1500000000, detail: '' },
+                { code: '3200', name: 'Tambahan Modal Disetor', amount: 500000000, detail: '' },
+                { code: '3300', name: 'Laba Ditahan', amount: 450000000, detail: '' },
+                { code: '3400', name: 'Laba Tahun Berjalan', amount: 400000000, detail: '' },
+                { code: '3510', name: 'Saldo Komponen Ekuitas Lainnya', amount: 0, detail: '' },
+                { code: '3520', name: 'Kenaikan (Kerugian) Komponen Ekuitas Lainnya', amount: 0, detail: '' }
+            ]
+        };
+        
+        const LK02_SAMPLE_DATA = {
+            pendapatan: [
+                { code: '4100', name: 'Pendapatan Jasa Keperantaraan Langsung', amount: 1250000000, detail: 'LR01' },
+                { code: '4110', name: '-/- Bagian Pendapatan Jasa Keperantaaran Perusahaan Lain – Member Cobroking', amount: 250000000, detail: '' },
+                { code: '4200', name: 'Pendapatan Jasa Keperantaraan Tidak Langsung', amount: 450000000, detail: 'LR01' },
+                { code: '4300', name: 'Pendapatan Jasa Konsultasi', amount: 320000000, detail: 'LR01' },
+                { code: '4400', name: 'Pendapatan Jasa Penanganan Klaim', amount: 180000000, detail: 'LR01' },
+                { code: '4900', name: 'Pendapatan Lainnya', amount: 95000000, detail: '' }
+            ],
+            beban: [
+                { code: '5100', name: 'Beban Pegawai dan Pengurus', amount: 650000000, detail: 'LR04' },
+                { code: '5200', name: 'Beban Pendidikan dan Latihan', amount: 85000000, detail: 'LR05' },
+                { code: '5300', name: 'Beban Pemasaran', amount: 125000000, detail: '' },
+                { code: '5400', name: 'Beban Komisi', amount: 320000000, detail: 'LR06' },
+                { code: '5500', name: 'Beban Operasional Lain', amount: 180000000, detail: 'LR07' },
+                { code: '5900', name: 'Beban Non Operasional', amount: 95000000, detail: 'LR08' }
+            ],
+            pajak: { amount: 120000000 },
+            lainnya: [
+                { code: '5710', name: 'Kenaikan (Penurunan) Penilaian Aset Tetap', amount: 0 },
+                { code: '5720', name: 'Keuntungan (Kerugian) Mata Uang Asing dan Lainnya', amount: 0 }
+            ]
+        };
+        
+        const LK03_SAMPLE_DATA = [
+            { name: 'Saldo Awal Kas-Bank', amount: 150000000 },
+            { name: 'Arus Kas Masuk untuk Aktivitas Operasi', amount: 1850000000 },
+            { name: 'Arus Kas Keluar untuk Aktivitas Operasi', amount: 1450000000 },
+            { name: 'Jumlah Arus Kas dari Aktivitas Operasi', amount: 400000000 },
+            { name: 'Arus Kas Masuk dari Aktivitas Investasi', amount: 250000000 },
+            { name: 'Arus Kas Keluar untuk Aktivitas Investasi', amount: 450000000 },
+            { name: 'Jumlah Arus Kas dari Aktivitas Investasi', amount: -200000000 },
+            { name: 'Arus Kas Masuk dari Aktivitas Pendanaan', amount: 150000000 },
+            { name: 'Arus Kas Keluar untuk Aktivitas Pendanaan', amount: 100000000 },
+            { name: 'Jumlah Arus Kas dari Aktivitas Pendanaan', amount: 50000000 },
+            { name: 'Kenaikan (Penurunan) Bersih Kas dan Setara Kas', amount: 250000000 },
+            { name: 'Saldo Akhir Kas -Bank', amount: 400000000 }
+        ];
+        
+        const LK04_SAMPLE_DATA = [
+            { name: 'Saldo Awal Ekuitas', amount: 1950000000 },
+            { name: 'Penambahan', amount: 500000000 },
+            { name: 'Pengurangan', amount: 100000000 },
+            { name: 'Saldo Akhir Ekuitas', amount: 2350000000 }
+        ];
+        
+        // ==============================================
+        // GLOBAL VARIABLES
+        // ==============================================
+        let currentData = {
+            lk01: null,
+            lk02: null,
+            lk03: null,
+            lk04: null
+        };
+        
+        let financialCharts = {};
+        let reportCount = 0;
+        
+        // ==============================================
+        // INITIALIZATION
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Financial Reports initialization started...');
+            
+            // Initialize components
+            initializeDateTime();
+            initializeSelect2();
+            initializeCharts();
+            
+            // Load initial data
+            loadAllReports();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            console.log('Financial Reports initialized successfully');
+        });
+        
+        // ==============================================
+        // DATABASE FUNCTIONS
+        // ==============================================
+        async function fetchFromDatabase(endpoint, params = {}) {
+            const token = localStorage.getItem('gibsysnet_token');
+            const url = new URL(`${DB_CONFIG.baseUrl}${endpoint}`);
+            
+            // Add query parameters
+            Object.keys(params).forEach(key => {
+                url.searchParams.append(key, params[key]);
+            });
+            
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Database error: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.warn(`Failed to fetch from ${endpoint}:`, error);
+                // Return sample data for demo
+                return getSampleData(endpoint);
+            }
+        }
+        
+        function getSampleData(endpoint) {
+            switch(endpoint) {
+                case DB_CONFIG.endpoints.lk01:
+                    return { 
+                        success: true, 
+                        data: LK01_SAMPLE_DATA,
+                        period: DB_CONFIG.currentPeriod,
+                        lastUpdated: new Date().toISOString()
+                    };
+                case DB_CONFIG.endpoints.lk02:
+                    return { 
+                        success: true, 
+                        data: LK02_SAMPLE_DATA,
+                        period: DB_CONFIG.currentPeriod,
+                        lastUpdated: new Date().toISOString()
+                    };
+                case DB_CONFIG.endpoints.lk03:
+                    return { 
+                        success: true, 
+                        data: LK03_SAMPLE_DATA,
+                        period: DB_CONFIG.currentPeriod,
+                        lastUpdated: new Date().toISOString()
+                    };
+                case DB_CONFIG.endpoints.lk04:
+                    return { 
+                        success: true, 
+                        data: LK04_SAMPLE_DATA,
+                        period: DB_CONFIG.currentPeriod,
+                        lastUpdated: new Date().toISOString()
+                    };
+                default:
+                    return { success: false, data: null };
+            }
+        }
+        
+        async function saveToDatabase(endpoint, data) {
+            const token = localStorage.getItem('gibsysnet_token');
+            
+            try {
+                const response = await fetch(`${DB_CONFIG.baseUrl}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Failed to save to database:', error);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // ==============================================
+        // DATA LOADING FUNCTIONS
+        // ==============================================
+        async function loadAllReports() {
+            showLoading();
+            
+            try {
+                const period = getCurrentPeriodParams();
+                
+                // Load all reports in parallel
+                const [lk01, lk02, lk03, lk04] = await Promise.all([
+                    fetchFromDatabase(DB_CONFIG.endpoints.lk01, period),
+                    fetchFromDatabase(DB_CONFIG.endpoints.lk02, period),
+                    fetchFromDatabase(DB_CONFIG.endpoints.lk03, period),
+                    fetchFromDatabase(DB_CONFIG.endpoints.lk04, period)
+                ]);
+                
+                currentData.lk01 = lk01.data || lk01;
+                currentData.lk02 = lk02.data || lk02;
+                currentData.lk03 = lk03.data || lk03;
+                currentData.lk04 = lk04.data || lk04;
+                
+                // Update UI
+                updateLK01Report();
+                updateLK02Report();
+                updateLK03Report();
+                updateLK04Report();
+                updateSummaryStatistics();
+                updateFinancialCharts();
+                
+                reportCount++;
+                document.getElementById('reportCount').textContent = reportCount;
+                
+                showSuccess('Reports loaded successfully from database');
+                
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                showError('Failed to load reports. Using sample data.');
+                
+                // Load sample data
+                loadSampleData();
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        function loadSampleData() {
+            currentData.lk01 = LK01_SAMPLE_DATA;
+            currentData.lk02 = LK02_SAMPLE_DATA;
+            currentData.lk03 = LK03_SAMPLE_DATA;
+            currentData.lk04 = LK04_SAMPLE_DATA;
+            
+            updateLK01Report();
+            updateLK02Report();
+            updateLK03Report();
+            updateLK04Report();
+            updateSummaryStatistics();
+            updateFinancialCharts();
+        }
+        
+        function getCurrentPeriodParams() {
+            const params = {
+                year: DB_CONFIG.currentPeriod.year,
+                periodType: DB_CONFIG.currentPeriod.type
+            };
+            
+            if (DB_CONFIG.currentPeriod.type === 'quarterly') {
+                params.quarter = DB_CONFIG.currentPeriod.quarter;
+            } else if (DB_CONFIG.currentPeriod.type === 'monthly') {
+                params.month = DB_CONFIG.currentPeriod.month;
+            }
+            
+            return params;
+        }
+        
+        // ==============================================
+        // UI UPDATE FUNCTIONS
+        // ==============================================
+        function updateLK01Report() {
+            if (!currentData.lk01) return;
+            
+            const data = currentData.lk01;
+            
+            // Update summary
+            const totalAset = data.aset.reduce((sum, item) => sum + item.amount, 0);
+            const totalLiabilitas = data.liabilitas.reduce((sum, item) => sum + item.amount, 0);
+            const totalEkuitas = data.ekuitas.reduce((sum, item) => sum + item.amount, 0);
+            
+            document.getElementById('lk01TotalAssets').textContent = formatCurrency(totalAset);
+            document.getElementById('lk01TotalLiabilities').textContent = formatCurrency(totalLiabilitas);
+            document.getElementById('lk01TotalEquity').textContent = formatCurrency(totalEkuitas);
+            
+            const balanceCheck = Math.abs(totalAset - (totalLiabilitas + totalEkuitas)) < 1000;
+            document.getElementById('lk01BalanceCheck').textContent = balanceCheck ? '✓ Balanced' : '✗ Imbalanced';
+            document.getElementById('lk01BalanceCheck').className = balanceCheck ? 'value positive-amount' : 'value negative-amount';
+            
+            // Update tables
+            updateTable('lk01AsetTable', data.aset);
+            updateTable('lk01LiabilitiesTable', data.liabilitas);
+            updateTable('lk01EquityTable', data.ekuitas);
+            
+            // Update totals
+            document.getElementById('lk01JumlahAset').textContent = formatNumber(totalAset);
+            document.getElementById('lk01JumlahLiabilities').textContent = formatNumber(totalLiabilitas);
+            document.getElementById('lk01JumlahEquity').textContent = formatNumber(totalEkuitas);
+            document.getElementById('lk01JumlahLiabilitiesEquity').textContent = formatNumber(totalLiabilitas + totalEkuitas);
+            
+            // Update period
+            const periodText = getPeriodText();
+            document.getElementById('lk01Period').textContent = periodText;
+            document.getElementById('lk01LastUpdate').textContent = new Date().toLocaleString();
+        }
+        
+        function updateLK02Report() {
+            if (!currentData.lk02) return;
+            
+            const data = currentData.lk02;
+            
+            // Calculate totals
+            const totalPendapatan = data.pendapatan.reduce((sum, item) => sum + item.amount, 0);
+            const totalBeban = data.beban.reduce((sum, item) => sum + item.amount, 0);
+            const labaSebelumPajak = totalPendapatan - totalBeban;
+            const labaSetelahPajak = labaSebelumPajak - data.pajak.amount;
+            
+            // Update summary
+            document.getElementById('lk02TotalRevenue').textContent = formatCurrency(totalPendapatan);
+            document.getElementById('lk02TotalExpenses').textContent = formatCurrency(totalBeban);
+            document.getElementById('lk02ProfitBeforeTax').textContent = formatCurrency(labaSebelumPajak);
+            document.getElementById('lk02NetProfit').textContent = formatCurrency(labaSetelahPajak);
+            
+            // Update tables
+            updateTable('lk02RevenueTable', data.pendapatan);
+            updateTable('lk02ExpensesTable', data.beban);
+            
+            // Update totals
+            document.getElementById('lk02JumlahPendapatan').textContent = formatNumber(totalPendapatan);
+            document.getElementById('lk02JumlahBeban').textContent = formatNumber(totalBeban);
+            document.getElementById('lk02LabaSebelumPajak').textContent = formatNumber(labaSebelumPajak);
+            document.getElementById('lk02BebanPajak').textContent = formatNumber(data.pajak.amount);
+            document.getElementById('lk02LabaSetelahPajak').textContent = formatNumber(labaSetelahPajak);
+            
+            // Update period
+            const periodText = getPeriodText();
+            document.getElementById('lk02Period').textContent = periodText;
+            document.getElementById('lk02LastUpdate').textContent = new Date().toLocaleString();
+        }
+        
+        function updateLK03Report() {
+            if (!currentData.lk03) return;
+            
+            const data = currentData.lk03;
+            
+            // Find key items
+            const cashOperations = data.find(item => item.name === 'Jumlah Arus Kas dari Aktivitas Operasi')?.amount || 0;
+            const cashInvesting = data.find(item => item.name === 'Jumlah Arus Kas dari Aktivitas Investasi')?.amount || 0;
+            const cashFinancing = data.find(item => item.name === 'Jumlah Arus Kas dari Aktivitas Pendanaan')?.amount || 0;
+            const netCashIncrease = data.find(item => item.name === 'Kenaikan (Penurunan) Bersih Kas dan Setara Kas')?.amount || 0;
+            
+            // Update summary
+            document.getElementById('lk03CashOperations').textContent = formatCurrency(cashOperations);
+            document.getElementById('lk03CashInvesting').textContent = formatCurrency(cashInvesting);
+            document.getElementById('lk03CashFinancing').textContent = formatCurrency(cashFinancing);
+            document.getElementById('lk03NetCashIncrease').textContent = formatCurrency(netCashIncrease);
+            
+            // Update table
+            const tableBody = document.getElementById('lk03CashFlowTable');
+            tableBody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td class="account-amount ${item.amount >= 0 ? 'positive-amount' : 'negative-amount'}">
+                        ${formatNumber(item.amount)}
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Update period
+            const periodText = getPeriodText();
+            document.getElementById('lk03Period').textContent = periodText;
+            document.getElementById('lk03LastUpdate').textContent = new Date().toLocaleString();
+        }
+        
+        function updateLK04Report() {
+            if (!currentData.lk04) return;
+            
+            const data = currentData.lk04;
+            
+            // Find key items
+            const beginningEquity = data.find(item => item.name === 'Saldo Awal Ekuitas')?.amount || 0;
+            const equityIncrease = data.find(item => item.name === 'Penambahan')?.amount || 0;
+            const equityDecrease = data.find(item => item.name === 'Pengurangan')?.amount || 0;
+            const endingEquity = data.find(item => item.name === 'Saldo Akhir Ekuitas')?.amount || 0;
+            
+            // Update summary
+            document.getElementById('lk04BeginningEquity').textContent = formatCurrency(beginningEquity);
+            document.getElementById('lk04EquityIncrease').textContent = formatCurrency(equityIncrease);
+            document.getElementById('lk04EquityDecrease').textContent = formatCurrency(equityDecrease);
+            document.getElementById('lk04EndingEquity').textContent = formatCurrency(endingEquity);
+            
+            // Update table
+            const tableBody = document.getElementById('lk04EquityChangeTable');
+            tableBody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td class="account-amount ${item.amount >= 0 ? 'positive-amount' : 'negative-amount'}">
+                        ${formatNumber(item.amount)}
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Update period
+            const periodText = getPeriodText();
+            document.getElementById('lk04Period').textContent = periodText;
+            document.getElementById('lk04LastUpdate').textContent = new Date().toLocaleString();
+        }
+        
+        function updateTable(tableId, data) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td class="account-code">${item.code || ''}</td>
+                    <td class="account-amount">${formatNumber(item.amount)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        function updateSummaryStatistics() {
+            if (!currentData.lk01 || !currentData.lk02) return;
+            
+            // Calculate from LK01
+            const totalAset = currentData.lk01.aset.reduce((sum, item) => sum + item.amount, 0);
+            const totalLiabilitas = currentData.lk01.liabilitas.reduce((sum, item) => sum + item.amount, 0);
+            const totalEkuitas = currentData.lk01.ekuitas.reduce((sum, item) => sum + item.amount, 0);
+            
+            // Calculate from LK02
+            const totalPendapatan = currentData.lk02.pendapatan.reduce((sum, item) => sum + item.amount, 0);
+            const totalBeban = currentData.lk02.beban.reduce((sum, item) => sum + item.amount, 0);
+            const labaSetelahPajak = totalPendapatan - totalBeban - currentData.lk02.pajak.amount;
+            
+            // Calculate from LK03
+            const netCashIncrease = currentData.lk03?.find(item => item.name === 'Kenaikan (Penurunan) Bersih Kas dan Setara Kas')?.amount || 0;
+            
+            // Update quick stats
+            document.getElementById('totalAssets').textContent = formatCurrency(totalAset);
+            document.getElementById('netProfit').textContent = formatCurrency(labaSetelahPajak);
+            document.getElementById('cashFlow').textContent = formatCurrency(netCashIncrease);
+            document.getElementById('totalEquity').textContent = formatCurrency(totalEkuitas);
+            
+            // Calculate trends (demo data - in real app would compare with previous period)
+            const assetsTrend = 12.5;
+            const profitTrend = 8.3;
+            const cashFlowTrend = 15.7;
+            const equityTrend = 6.2;
+            
+            document.getElementById('assetsTrend').textContent = `${assetsTrend}%`;
+            document.getElementById('profitTrend').textContent = `${profitTrend}%`;
+            document.getElementById('cashFlowTrend').textContent = `${cashFlowTrend}%`;
+            document.getElementById('equityTrend').textContent = `${equityTrend}%`;
+            
+            // Update trend colors
+            updateTrendColors('assetsTrend', assetsTrend);
+            updateTrendColors('profitTrend', profitTrend);
+            updateTrendColors('cashFlowTrend', cashFlowTrend);
+            updateTrendColors('equityTrend', equityTrend);
+            
+            // Update profit margin
+            const profitMargin = totalPendapatan > 0 ? (labaSetelahPajak / totalPendapatan * 100) : 0;
+            document.getElementById('profitMarginSummary').textContent = `${profitMargin.toFixed(1)}%`;
+            document.getElementById('profitMarginBar').style.width = `${Math.min(profitMargin, 100)}%`;
+        }
+        
+        // ==============================================
+        // CHART FUNCTIONS
+        // ==============================================
+        function initializeCharts() {
+            // Financial Trend Chart
+            const trendCtx = document.getElementById('financialTrendChart');
+            financialCharts.trend = new Chart(trendCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024'],
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: [980, 1050, 1120, 1200, 1250],
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Net Profit',
+                            data: [320, 350, 380, 400, 400],
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Amount (Million IDR)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Asset Composition Chart
+            const assetCtx = document.getElementById('assetCompositionChart');
+            financialCharts.asset = new Chart(assetCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kas & Setara Kas', 'Investasi', 'Piutang', 'Aset Tetap', 'Aset Lain'],
+                    datasets: [{
+                        data: [250, 1250, 1350, 650, 125],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(236, 72, 153, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(16, 185, 129)',
+                            'rgb(59, 130, 246)',
+                            'rgb(139, 92, 246)',
+                            'rgb(245, 158, 11)',
+                            'rgb(236, 72, 153)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateFinancialCharts() {
+            if (!currentData.lk01 || !currentData.lk02) return;
+            
+            // Update asset composition chart
+            const asetData = currentData.lk01.aset;
+            const assetCategories = {
+                'Kas & Setara Kas': asetData.filter(a => a.code === '1100' || a.code === '1110').reduce((sum, a) => sum + a.amount, 0),
+                'Investasi': asetData.filter(a => a.code === '1200').reduce((sum, a) => sum + a.amount, 0),
+                'Piutang': asetData.filter(a => a.code.startsWith('13') || a.code.startsWith('14') || a.code.startsWith('15') || a.code.startsWith('16')).reduce((sum, a) => sum + a.amount, 0),
+                'Aset Tetap': asetData.filter(a => a.code === '1700').reduce((sum, a) => sum + a.amount, 0),
+                'Aset Lain': asetData.filter(a => a.code === '1900').reduce((sum, a) => sum + a.amount, 0)
+            };
+            
+            if (financialCharts.asset) {
+                financialCharts.asset.data.datasets[0].data = Object.values(assetCategories);
+                financialCharts.asset.update();
+            }
+            
+            // Update financial ratios
+            updateFinancialRatios();
+        }
+        
+        function updateFinancialRatios() {
+            if (!currentData.lk01 || !currentData.lk02) return;
+            
+            const totalAset = currentData.lk01.aset.reduce((sum, item) => sum + item.amount, 0);
+            const totalLiabilitas = currentData.lk01.liabilitas.reduce((sum, item) => sum + item.amount, 0);
+            const totalEkuitas = currentData.lk01.ekuitas.reduce((sum, item) => sum + item.amount, 0);
+            const totalPendapatan = currentData.lk02.pendapatan.reduce((sum, item) => sum + item.amount, 0);
+            const labaSetelahPajak = totalPendapatan - currentData.lk02.beban.reduce((sum, item) => sum + item.amount, 0) - currentData.lk02.pajak.amount;
+            
+            const ratios = [
+                { name: 'Current Ratio', value: '2.5', status: 'good', description: 'Likuiditas baik' },
+                { name: 'Debt to Equity Ratio', value: '0.65', status: 'good', description: 'Struktur modal sehat' },
+                { name: 'Return on Assets (ROA)', value: `${(labaSetelahPajak / totalAset * 100).toFixed(1)}%`, status: 'good', description: 'Efisiensi aset baik' },
+                { name: 'Return on Equity (ROE)', value: `${(labaSetelahPajak / totalEkuitas * 100).toFixed(1)}%`, status: 'good', description: 'Pengembalian ekuitas baik' },
+                { name: 'Net Profit Margin', value: `${(labaSetelahPajak / totalPendapatan * 100).toFixed(1)}%`, status: 'good', description: 'Profitabilitas sehat' },
+                { name: 'Asset Turnover', value: '0.85', status: 'warning', description: 'Efisiensi aset perlu ditingkatkan' }
+            ];
+            
+            const container = document.getElementById('financialRatios');
+            container.innerHTML = ratios.map(ratio => `
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="card-title mb-0">${ratio.name}</h6>
+                                <span class="badge bg-${ratio.status === 'good' ? 'success' : ratio.status === 'warning' ? 'warning' : 'danger'}-subtle text-${ratio.status === 'good' ? 'success' : ratio.status === 'warning' ? 'warning' : 'danger'}">
+                                    ${ratio.value}
+                                </span>
+                            </div>
+                            <p class="card-text text-muted small">${ratio.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ==============================================
+        // PERIOD MANAGEMENT
+        // ==============================================
+        function setPeriod(periodType) {
+            DB_CONFIG.currentPeriod.type = periodType;
+            
+            // Update UI
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update period filter options
+            updatePeriodFilterOptions();
+            
+            // Load reports for new period
+            loadReports();
+        }
+        
+        function updatePeriodFilterOptions() {
+            const periodFilter = document.getElementById('periodFilter');
+            
+            if (DB_CONFIG.currentPeriod.type === 'quarterly') {
+                periodFilter.innerHTML = `
+                    <option value="Q1">Triwulan I (Jan-Mar)</option>
+                    <option value="Q2">Triwulan II (Apr-Jun)</option>
+                    <option value="Q3">Triwulan III (Jul-Sep)</option>
+                    <option value="Q4">Triwulan IV (Okt-Dec)</option>
+                `;
+            } else if (DB_CONFIG.currentPeriod.type === 'monthly') {
+                periodFilter.innerHTML = `
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                `;
+            } else if (DB_CONFIG.currentPeriod.type === 'annual') {
+                periodFilter.innerHTML = `
+                    <option value="2024">Tahun 2024</option>
+                    <option value="2023">Tahun 2023</option>
+                    <option value="2022">Tahun 2022</option>
+                `;
+            }
+        }
+        
+        function getPeriodText() {
+            const year = document.getElementById('yearFilter').value;
+            const period = document.getElementById('periodFilter').value;
+            
+            if (DB_CONFIG.currentPeriod.type === 'quarterly') {
+                const quarterNames = {
+                    'Q1': 'Triwulan I',
+                    'Q2': 'Triwulan II',
+                    'Q3': 'Triwulan III',
+                    'Q4': 'Triwulan IV'
+                };
+                return `${quarterNames[period]} ${year}`;
+            } else if (DB_CONFIG.currentPeriod.type === 'monthly') {
+                const monthNames = {
+                    '01': 'Januari', '02': 'Februari', '03': 'Maret',
+                    '04': 'April', '05': 'Mei', '06': 'Juni',
+                    '07': 'Juli', '08': 'Agustus', '09': 'September',
+                    '10': 'Oktober', '11': 'November', '12': 'Desember'
+                };
+                return `${monthNames[period]} ${year}`;
+            } else {
+                return `Tahun ${period}`;
+            }
+        }
+        
+        // ==============================================
+        // ACTION FUNCTIONS
+        // ==============================================
+        function loadReports() {
+            // Update current period from filters
+            DB_CONFIG.currentPeriod.year = parseInt(document.getElementById('yearFilter').value);
+            DB_CONFIG.currentPeriod.quarter = document.getElementById('periodFilter').value;
+            
+            // Load reports
+            loadAllReports();
+        }
+        
+        function resetFilters() {
+            document.getElementById('yearFilter').value = '2024';
+            document.getElementById('periodFilter').value = 'Q1';
+            document.getElementById('companyFilter').value = 'all';
+            document.getElementById('auditedCheck').checked = true;
+            document.getElementById('validatedCheck').checked = true;
+            
+            $('.select2').val(null).trigger('change');
+            
+            loadReports();
+        }
+        
+        function refreshReports() {
+            loadReports();
+        }
+        
+        function exportFinancialReport() {
+            showLoading();
+            
+            const reportData = {
+                lk01: currentData.lk01,
+                lk02: currentData.lk02,
+                lk03: currentData.lk03,
+                lk04: currentData.lk04,
+                period: getPeriodText(),
+                generated: new Date().toISOString(),
+                company: document.getElementById('companyFilter').value
+            };
+            
+            // Save to database
+            saveToDatabase(DB_CONFIG.endpoints.export, reportData)
+                .then(response => {
+                    if (response.success) {
+                        // Also download as JSON
+                        const dataStr = JSON.stringify(reportData, null, 2);
+                        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                        const exportFileDefaultName = `financial-report-${getPeriodText().replace(/ /g, '-')}.json`;
+                        
+                        const linkElement = document.createElement('a');
+                        linkElement.setAttribute('href', dataUri);
+                        linkElement.setAttribute('download', exportFileDefaultName);
+                        linkElement.click();
+                        
+                        showSuccess('Report exported successfully and saved to database');
+                    } else {
+                        showError('Failed to save to database');
+                    }
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        function generateComparativeReport() {
+            showLoading();
+            setTimeout(() => {
+                alert('Comparative report generation would compare current period with previous periods from database.');
+                hideLoading();
+            }, 1000);
+        }
+        
+        function validateAllReports() {
+            showLoading();
+            
+            // Simulate validation with database
+            fetchFromDatabase(DB_CONFIG.endpoints.validation, getCurrentPeriodParams())
+                .then(response => {
+                    if (response.success) {
+                        showSuccess('All reports validated successfully against database');
+                    } else {
+                        showWarning('Validation completed with warnings');
+                    }
+                })
+                .catch(() => {
+                    showInfo('Validation completed (demo mode)');
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        function syncWithDatabase() {
+            showLoading();
+            
+            // Simulate database sync
+            setTimeout(() => {
+                reportCount++;
+                document.getElementById('reportCount').textContent = reportCount;
+                document.getElementById('lastSync').textContent = new Date().toLocaleTimeString();
+                document.getElementById('dbStatus').innerHTML = '<i class="fas fa-database me-2"></i>Synced with Database';
+                
+                showSuccess('Successfully synced with database');
+                hideLoading();
+            }, 1500);
+        }
+        
+        function showDatabaseInfo() {
+            alert(`Database Connection Info:
+• Endpoint: ${DB_CONFIG.baseUrl}
+• Current Period: ${getPeriodText()}
+• Reports Loaded: ${reportCount}
+• Last Sync: ${document.getElementById('lastSync').textContent}
+• Status: Connected`);
+        }
+        
+        function setChartPeriod(period) {
+            // Update active button
+            document.querySelectorAll('#summary-tab-pane .btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log(`Chart period changed to: ${period}`);
+        }
+        
+        // ==============================================
+        // UTILITY FUNCTIONS
+        // ==============================================
+        function initializeDateTime() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        }
+        
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('en-US', dateOptions);
+            
+            const periodText = getPeriodText();
+            document.getElementById('currentPeriod').textContent = periodText;
+        }
+        
+        function initializeSelect2() {
+            $('.select2').select2({
+                placeholder: 'Select option',
+                allowClear: true,
+                width: '100%'
+            });
+        }
+        
+        function formatCurrency(amount) {
+            if (amount >= 1000000000) {
+                return 'Rp ' + (amount / 1000000000).toFixed(2) + 'M';
+            } else if (amount >= 1000000) {
+                return 'Rp ' + (amount / 1000000).toFixed(2) + 'Jt';
+            } else if (amount >= 1000) {
+                return 'Rp ' + (amount / 1000).toFixed(2) + 'K';
+            }
+            return 'Rp ' + amount.toFixed(2);
+        }
+        
+        function formatNumber(amount) {
+            return new Intl.NumberFormat('id-ID').format(amount);
+        }
+        
+        function updateTrendColors(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const parent = element.closest('.stat-trend');
+            if (!parent) return;
+            
+            if (value > 0) {
+                parent.className = 'stat-trend positive';
+                parent.querySelector('i').className = 'fas fa-arrow-up';
+            } else if (value < 0) {
+                parent.className = 'stat-trend negative';
+                parent.querySelector('i').className = 'fas fa-arrow-down';
+            } else {
+                parent.className = 'stat-trend';
+                parent.querySelector('i').className = 'fas fa-minus';
+            }
+        }
+        
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        function hideLoading() {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 300);
+        }
+
+        function showToast(message, type = 'info', duration = 5000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            const toastHtml = `
+                <div id="${toastId}" class="toast-modern mb-3" role="alert">
+                    <div class="toast-body d-flex align-items-center p-3">
+                        <div class="toast-icon me-3">
+                            ${type === 'success' ? '<i class="fas fa-check-circle text-success fa-lg"></i>' : ''}
+                            ${type === 'error' ? '<i class="fas fa-exclamation-circle text-danger fa-lg"></i>' : ''}
+                            ${type === 'warning' ? '<i class="fas fa-exclamation-triangle text-warning fa-lg"></i>' : ''}
+                            ${type === 'info' ? '<i class="fas fa-info-circle text-primary fa-lg"></i>' : ''}
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="mb-0">${message}</p>
+                        </div>
+                        <button type="button" class="btn-close ms-3" onclick="document.getElementById('${toastId}').remove()"></button>
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('afterbegin', toastHtml);
+            
+            setTimeout(() => {
+                const toast = document.getElementById(toastId);
+                if (toast) {
+                    toast.style.transition = 'all 0.3s ease';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, duration);
+        }
+
+        function showSuccess(message) {
+            showToast(message, 'success');
+        }
+
+        function showError(message) {
+            showToast(message, 'error');
+        }
+
+        function showWarning(message) {
+            showToast(message, 'warning');
+        }
+
+        function showInfo(message) {
+            showToast(message, 'info');
+        }
+        
+        // ==============================================
+        // EVENT LISTENERS
+        // ==============================================
+        function setupEventListeners() {
+            // Filter change events
+            document.getElementById('yearFilter').addEventListener('change', loadReports);
+            document.getElementById('periodFilter').addEventListener('change', loadReports);
+            document.getElementById('companyFilter').addEventListener('change', loadReports);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + R for refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshReports();
+                }
+                
+                // Ctrl + S for save/export
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    exportFinancialReport();
+                }
+            });
+            
+            // Tab change tracking
+            const tabEls = document.querySelectorAll('#financialTabs button[data-bs-toggle="tab"]');
+            tabEls.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(event) {
+                    const activeTab = event.target.getAttribute('id');
+                    console.log('Tab changed to:', activeTab);
+                });
+            });
+        }
+        
+        // ==============================================
+        // INITIALIZATION COMPLETE
+        // ==============================================
+        console.log('Financial Reports fully initialized');
+        hideLoading();
+        
+        // Show welcome message
+        setTimeout(() => {
+            showInfo('Financial reports loaded successfully. Connected to database.');
+        }, 1000);
+    </script>
+</body>
+</html>

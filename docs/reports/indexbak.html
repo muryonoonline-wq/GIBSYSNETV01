@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIBSYSNET - Advanced Reporting Dashboard</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1e293b;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(100px, -100px);
+        }
+        
+        .header-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(-50px, 50px);
+        }
+        
+        .stat-card {
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(20px, -20px);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stat-trend.positive {
+            color: #10b981;
+        }
+        
+        .stat-trend.negative {
+            color: #ef4444;
+        }
+        
+        .quick-action-card {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        }
+        
+        .quick-action-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .quick-action-card:hover i {
+            transform: scale(1.1);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .activity-time {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .toast {
+            z-index: 10000;
+        }
+        
+        .tab-content {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 25px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            padding: 12px 25px;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: white;
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+        }
+        
+        .data-card {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .data-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .header-section {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+        
+        .weather-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .weather-card i {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+        
+        .update-time {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header-section glass-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-2"><i class="fas fa-chart-network me-3"></i>GIBSYSNET Analytics Dashboard</h1>
+                    <p class="lead mb-0 opacity-75">Real-time insights and comprehensive reporting for insurance management</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <div class="text-end">
+                            <h5 class="mb-1" id="currentDate">Loading...</h5>
+                            <p class="mb-0 opacity-75" id="currentTime">00:00:00</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-light rounded-circle p-2" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="refreshDashboard()"><i class="fas fa-sync-alt me-2"></i>Refresh Dashboard</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportDashboard()"><i class="fas fa-download me-2"></i>Export All Reports</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="../dashboard/dashboard-user.html"><i class="fas fa-arrow-left me-2"></i>Back to Main Dashboard</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card glass-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white;">
+                    <i class="fas fa-file-contract"></i>
+                    <h2 class="stat-number" id="totalPolicies">0</h2>
+                    <p class="stat-label">Total Policies</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="policiesGrowth">0%</span> this month
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card glass-card" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white;">
+                    <i class="fas fa-users"></i>
+                    <h2 class="stat-number" id="totalClients">0</h2>
+                    <p class="stat-label">Active Clients</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="clientsGrowth">0%</span> growth
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card glass-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2 class="stat-number" id="pendingClaims">0</h2>
+                    <p class="stat-label">Pending Claims</p>
+                    <div class="stat-trend negative">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="claimsChange">0%</span> from last week
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card glass-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h2 class="stat-number" id="totalPremium">$0</h2>
+                    <p class="stat-label">Total Premium</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="premiumGrowth">0%</span> increase
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="row g-4 mb-4">
+            <!-- Left Column: Charts -->
+            <div class="col-lg-8">
+                <!-- Time Filter -->
+                <div class="glass-card mb-4 p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Data Overview</h5>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="filter-btn active" onclick="setTimeFilter('today')">Today</button>
+                            <button type="button" class="filter-btn" onclick="setTimeFilter('week')">This Week</button>
+                            <button type="button" class="filter-btn" onclick="setTimeFilter('month')">This Month</button>
+                            <button type="button" class="filter-btn" onclick="setTimeFilter('quarter')">This Quarter</button>
+                            <button type="button" class="filter-btn" onclick="setTimeFilter('year')">This Year</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 1 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="glass-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0"><i class="fas fa-chart-pie me-2 text-primary"></i>Policy Status Distribution</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="downloadChart('policyChart')">Download Chart</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="toggleChartType('policyChart')">Switch View</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="policyChart"></canvas>
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted" id="policyChartInfo">Click segments for details</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2 text-success"></i>Monthly Claims Trend</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="downloadChart('claimsChart')">Download Chart</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="toggleChartType('claimsChart')">Switch View</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="claimsChart"></canvas>
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted" id="claimsChartInfo">Last 12 months trend</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 2 -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="glass-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0"><i class="fas fa-chart-bar me-2 text-warning"></i>Revenue by Policy Type</h5>
+                                <span class="badge bg-warning" id="revenuePeriod">Monthly</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Regional Distribution</h5>
+                                <span class="badge bg-info" id="topRegion">Loading...</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="regionalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Quick Actions & Recent Activity -->
+            <div class="col-lg-4">
+                <!-- Quick Actions -->
+                <div class="glass-card mb-4">
+                    <h5 class="mb-3"><i class="fas fa-bolt me-2 text-primary"></i>Quick Actions</h5>
+                    <div class="row g-3">
+                        <div class="col-6">
+                        <a href="policies-report.html" class="quick-action-card glass-card text-decoration-none">
+                                <div class="notification-badge">3</div>
+                                <i class="fas fa-file-contract text-primary"></i>
+                                <h6 class="mb-1">Policy Reports</h6>
+                                <small class="text-muted">Detailed analysis</small>
+                            </a> 
+                        </div>
+                        <div class="col-6">
+                            <a href="clients-report.html" class="quick-action-card glass-card text-decoration-none">
+                                <i class="fas fa-users text-success"></i>
+                                <h6 class="mb-1">Client Reports</h6>
+                               <small class="text-muted">Client insights</small>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="claims-report.html" class="quick-action-card glass-card text-decoration-none">
+                                <div class="notification-badge">5</div>
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                                <h6 class="mb-1">Claims Reports</h6>
+                                <small class="text-muted">Claims tracking</small>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="financial-report.html" class="quick-action-card glass-card text-decoration-none">
+                                <i class="fas fa-chart-line text-info"></i>
+                                <h6 class="mb-1">Financial Reports</h6>
+                                <small class="text-muted">Revenue & expenses</small>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <div class="quick-action-card glass-card" onclick="generatePerformanceReport()">
+                                <i class="fas fa-trophy text-purple"></i>
+                                <h6 class="mb-1">Performance</h6>
+                                <small class="text-muted">KPI dashboard</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="quick-action-card glass-card" onclick="openAlertCenter()">
+                                <div class="notification-badge">2</div>
+                                <i class="fas fa-bell text-danger"></i>
+                                <h6 class="mb-1">Alerts</h6>
+                                <small class="text-muted">System alerts</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="glass-card recent-activity">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0"><i class="fas fa-history me-2 text-secondary"></i>Recent Activity</h5>
+                        <button class="btn btn-sm btn-link" onclick="loadMoreActivities()">View All</button>
+                    </div>
+                    <div id="activityList">
+                        <!-- Activities will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- System Status -->
+                <div class="glass-card mt-4">
+                    <h5 class="mb-3"><i class="fas fa-server me-2 text-info"></i>System Status</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="data-card">
+                                <div class="icon bg-primary bg-opacity-10 text-primary">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <h6 class="mb-1">Database</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                                    </div>
+                                    <small>85%</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="data-card">
+                                <div class="icon bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h6 class="mb-1">API Response</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                        <div class="progress-bar bg-info" style="width: 98%"></div>
+                                    </div>
+                                    <small>98%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="update-time text-center mt-2">
+                        <small>Last updated: <span id="lastUpdateTime">Just now</span></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Reports Section -->
+        <div class="glass-card mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2 text-primary"></i>Advanced Reports</h5>
+                    <p class="text-muted mb-0">Comprehensive analytics and insights</p>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-download me-2"></i>Export Options
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="exportAllReports()"><i class="fas fa-file-archive me-2"></i>Export All Reports</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="exportAsPDF()"><i class="fas fa-file-pdf me-2"></i>Export as PDF</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="exportAsExcel()"><i class="fas fa-file-excel me-2"></i>Export as Excel</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="scheduleReport()"><i class="fas fa-calendar-alt me-2"></i>Schedule Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Risk Analysis</h5>
+                            <p class="card-text text-muted">Comprehensive risk assessment and mitigation reports</p>
+                            <button class="btn btn-outline-primary" onclick="openRiskAnalysis()">Generate Report</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-network fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title">Performance Metrics</h5>
+                            <p class="card-text text-muted">KPI tracking and performance analytics</p>
+                            <button class="btn btn-outline-success" onclick="openPerformanceMetrics()">View Metrics</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-lightbulb fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title">Predictive Insights</h5>
+                            <p class="card-text text-muted">AI-powered predictions and recommendations</p>
+                            <button class="btn btn-outline-warning" onclick="openPredictiveInsights()">Get Insights</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-muted mt-4">
+            <p class="mb-1">GIBSYSNET Reporting Dashboard v2.0 • <span id="dashboardVersion">2024.1</span></p>
+            <p class="mb-0">Data refreshes automatically every 5 minutes</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // ==============================================
+        // API CONFIGURATION
+        // ==============================================
+        
+        // Choose your API configuration (same as policies-report.html)
+        const API_BASE_URL = 'http://localhost:3000'; // Default for JSON Server
+        
+        const API_ENDPOINTS = {
+            dashboard: `${API_BASE_URL}/dashboard`,
+            statistics: `${API_BASE_URL}/statistics`,
+            activities: `${API_BASE_URL}/activities`,
+            charts: `${API_BASE_URL}/charts`
+        };
+        
+        // ==============================================
+        // SAMPLE DATA FOR DEMO (Fallback if API not available)
+        // ==============================================
+        const SAMPLE_DASHBOARD_DATA = {
+            totalPolicies: 245,
+            totalClients: 189,
+            pendingClaims: 23,
+            totalPremium: 1854300,
+            policiesGrowth: 12.5,
+            clientsGrowth: 8.3,
+            claimsChange: -5.2,
+            premiumGrowth: 15.7
+        };
+        
+        const SAMPLE_ACTIVITIES = [
+            { id: 1, type: 'policy', action: 'New policy created', user: 'John Smith', time: '2 minutes ago', icon: 'file-contract', color: 'primary' },
+            { id: 2, type: 'claim', action: 'Claim approved', user: 'Sarah Johnson', time: '15 minutes ago', icon: 'check-circle', color: 'success' },
+            { id: 3, type: 'client', action: 'Client registered', user: 'Mike Wilson', time: '1 hour ago', icon: 'user-plus', color: 'info' },
+            { id: 4, type: 'system', action: 'System backup completed', user: 'System', time: '2 hours ago', icon: 'database', color: 'secondary' },
+            { id: 5, type: 'alert', action: 'Policy expiration warning', user: 'System', time: '3 hours ago', icon: 'exclamation-triangle', color: 'warning' }
+        ];
+        
+        // ==============================================
+        // GLOBAL VARIABLES
+        // ==============================================
+        let charts = {};
+        let currentTimeFilter = 'month';
+        let autoRefreshInterval;
+        
+        // ==============================================
+        // INITIALIZATION
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard initialization started...');
+            
+            // Check authentication
+            if (!checkAuth()) return;
+            
+            // Initialize components
+            initializeDateTime();
+            initializeCharts();
+            
+            // Load data
+            loadDashboardData();
+            loadActivities();
+            
+            // Setup auto-refresh
+            setupAutoRefresh();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            console.log('Dashboard initialized successfully');
+        });
+        
+        // ==============================================
+        // AUTHENTICATION & SECURITY
+        // ==============================================
+        function checkAuth() {
+            const token = localStorage.getItem('gibsysnet_token');
+            const user = localStorage.getItem('gibsysnet_user');
+            
+            if (!token || !user) {
+                console.warn('No authentication found. Redirecting to login...');
+                // window.location.href = '../login.html';
+                // return false;
+            }
+            
+            // For demo, we'll continue even without auth
+            console.log('Authentication check passed');
+            return true;
+        }
+        
+        // ==============================================
+        // DATA LOADING FUNCTIONS
+        // ==============================================
+        async function loadDashboardData() {
+            showLoading();
+            
+            try {
+                // Try to fetch from API
+                const response = await fetchWithAuth(API_ENDPOINTS.dashboard);
+                
+                if (response && response.data) {
+                    updateDashboardStats(response.data);
+                    updateChartsData(response.data.charts || {});
+                } else {
+                    // Fallback to sample data
+                    console.log('Using sample dashboard data');
+                    updateDashboardStats(SAMPLE_DASHBOARD_DATA);
+                    updateChartsData(getSampleChartData());
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showError('Failed to load dashboard data. Using sample data.');
+                updateDashboardStats(SAMPLE_DASHBOARD_DATA);
+                updateChartsData(getSampleChartData());
+            } finally {
+                hideLoading();
+                updateLastUpdateTime();
+            }
+        }
+        
+        async function loadActivities() {
+            try {
+                const response = await fetchWithAuth(API_ENDPOINTS.activities);
+                const activities = response && response.data ? response.data : SAMPLE_ACTIVITIES;
+                renderActivities(activities);
+            } catch (error) {
+                console.error('Error loading activities:', error);
+                renderActivities(SAMPLE_ACTIVITIES);
+            }
+        }
+        
+        // ==============================================
+        // HELPER FUNCTIONS
+        // ==============================================
+        async function fetchWithAuth(url, options = {}) {
+            const token = localStorage.getItem('gibsysnet_token');
+            
+            const defaultOptions = {
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            };
+            
+            const finalOptions = { ...defaultOptions, ...options };
+            
+            try {
+                const response = await fetch(url, finalOptions);
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '../login.html';
+                        return null;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.warn('API Error:', error.message);
+                return null;
+            }
+        }
+        
+        function updateDashboardStats(data) {
+            // Update statistics cards
+            document.getElementById('totalPolicies').textContent = data.totalPolicies || 0;
+            document.getElementById('totalClients').textContent = data.totalClients || 0;
+            document.getElementById('pendingClaims').textContent = data.pendingClaims || 0;
+            document.getElementById('totalPremium').textContent = formatCurrency(data.totalPremium || 0);
+            
+            // Update trends
+            document.getElementById('policiesGrowth').textContent = `${data.policiesGrowth || 0}%`;
+            document.getElementById('clientsGrowth').textContent = `${data.clientsGrowth || 0}%`;
+            document.getElementById('claimsChange').textContent = `${data.claimsChange || 0}%`;
+            document.getElementById('premiumGrowth').textContent = `${data.premiumGrowth || 0}%`;
+            
+            // Update trend colors
+            updateTrendColors('policiesGrowth', data.policiesGrowth);
+            updateTrendColors('clientsGrowth', data.clientsGrowth);
+            updateTrendColors('claimsChange', data.claimsChange);
+            updateTrendColors('premiumGrowth', data.premiumGrowth);
+        }
+        
+        function updateTrendColors(elementId, value) {
+            const element = document.getElementById(elementId);
+            const parent = element.closest('.stat-trend');
+            if (!parent) return;
+            
+            if (value > 0) {
+                parent.className = 'stat-trend positive';
+                parent.querySelector('i').className = 'fas fa-arrow-up';
+            } else if (value < 0) {
+                parent.className = 'stat-trend negative';
+                parent.querySelector('i').className = 'fas fa-arrow-down';
+            } else {
+                parent.className = 'stat-trend';
+                parent.querySelector('i').className = 'fas fa-minus';
+            }
+        }
+        
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat().format(num);
+        }
+        
+        // ==============================================
+        // CHART FUNCTIONS
+        // ==============================================
+        function initializeCharts() {
+            // Policy Status Chart (Doughnut)
+            const policyCtx = document.getElementById('policyChart');
+            charts.policy = new Chart(policyCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Active', 'Pending', 'Expired', 'Cancelled'],
+                    datasets: [{
+                        data: [65, 15, 10, 10],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(156, 163, 175, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)',
+                            'rgb(156, 163, 175)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed}%`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: function(evt, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const status = ['Active', 'Pending', 'Expired', 'Cancelled'][index];
+                            alert(`Showing details for ${status} policies`);
+                        }
+                    }
+                }
+            });
+            
+            // Claims Trend Chart (Line)
+            const claimsCtx = document.getElementById('claimsChart');
+            charts.claims = new Chart(claimsCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Claims',
+                        data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Claims'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Revenue Chart (Bar)
+            const revenueCtx = document.getElementById('revenueChart');
+            charts.revenue = new Chart(revenueCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Property', 'Vehicle', 'Health', 'Life', 'Travel'],
+                    datasets: [{
+                        label: 'Revenue (in thousands)',
+                        data: [45, 30, 25, 40, 15],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(37, 99, 235)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Regional Chart (Polar Area)
+            const regionalCtx = document.getElementById('regionalChart');
+            charts.regional = new Chart(regionalCtx.getContext('2d'), {
+                type: 'polarArea',
+                data: {
+                    labels: ['North', 'South', 'East', 'West', 'Central'],
+                    datasets: [{
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(37, 99, 235)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChartsData(chartData) {
+            // Update charts with new data if available
+            if (chartData.policy) {
+                charts.policy.data.datasets[0].data = chartData.policy;
+                charts.policy.update();
+            }
+            
+            if (chartData.claims) {
+                charts.claims.data.datasets[0].data = chartData.claims;
+                charts.claims.update();
+            }
+            
+            if (chartData.revenue) {
+                charts.revenue.data.datasets[0].data = chartData.revenue;
+                charts.revenue.update();
+            }
+            
+            if (chartData.regional) {
+                charts.regional.data.datasets[0].data = chartData.regional;
+                charts.regional.update();
+            }
+        }
+        
+        function getSampleChartData() {
+            return {
+                policy: [65, 15, 10, 10],
+                claims: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
+                revenue: [45, 30, 25, 40, 15],
+                regional: [30, 25, 20, 15, 10]
+            };
+        }
+        
+        // ==============================================
+        // UI FUNCTIONS
+        // ==============================================
+        function initializeDateTime() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        }
+        
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('en-US', dateOptions);
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleTimeString('en-US', timeOptions);
+        }
+        
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('lastUpdateTime').textContent = timeString;
+        }
+        
+        function renderActivities(activities) {
+            const container = document.getElementById('activityList');
+            if (!container) return;
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-${activity.icon} text-${activity.color}"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">${activity.action}</h6>
+                                <small class="text-muted">By ${activity.user}</small>
+                            </div>
+                        </div>
+                        <small class="activity-time">${activity.time}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function setTimeFilter(filter) {
+            currentTimeFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update chart info
+            const periodMap = {
+                'today': 'Today',
+                'week': 'This Week',
+                'month': 'This Month',
+                'quarter': 'This Quarter',
+                'year': 'This Year'
+            };
+            
+            document.getElementById('revenuePeriod').textContent = periodMap[filter];
+            document.getElementById('policyChartInfo').textContent = `Data for ${periodMap[filter].toLowerCase()}`;
+            
+            // Reload data with new filter
+            loadDashboardData();
+        }
+        
+        // ==============================================
+        // ACTION FUNCTIONS
+        // ==============================================
+        function refreshDashboard() {
+            showLoading();
+            setTimeout(() => {
+                loadDashboardData();
+                loadActivities();
+                showSuccess('Dashboard refreshed successfully!');
+            }, 1000);
+        }
+        
+        function exportDashboard() {
+            showLoading();
+            setTimeout(() => {
+                const dataStr = JSON.stringify({
+                    statistics: SAMPLE_DASHBOARD_DATA,
+                    timestamp: new Date().toISOString()
+                }, null, 2);
+                
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                const exportFileDefaultName = `gibsysnet-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                hideLoading();
+                showSuccess('Dashboard exported successfully!');
+            }, 1500);
+        }
+        
+        function exportAllReports() {
+            alert('Exporting all reports... This feature would generate comprehensive reports in the background.');
+        }
+        
+        function exportAsPDF() {
+            alert('PDF export functionality would be implemented here.');
+        }
+        
+        function exportAsExcel() {
+            alert('Excel export functionality would be implemented here.');
+        }
+        
+        function scheduleReport() {
+            alert('Report scheduling functionality would be implemented here.');
+        }
+        
+        function generatePerformanceReport() {
+            window.open('performance-report.html', '_blank');
+        }
+        
+        function openRiskAnalysis() {
+            window.open('risk-analysis.html', '_blank');
+        }
+        
+        function openPerformanceMetrics() {
+            window.open('performance-metrics.html', '_blank');
+        }
+        
+        function openPredictiveInsights() {
+            window.open('predictive-insights.html', '_blank');
+        }
+        
+        function openAlertCenter() {
+            alert('Alert center would open here.');
+        }
+        
+        function downloadChart(chartId) {
+            const chart = charts[chartId];
+            if (chart) {
+                const link = document.createElement('a');
+                link.download = `${chartId}-${new Date().toISOString().split('T')[0]}.png`;
+                link.href = chart.toBase64Image();
+                link.click();
+            }
+        }
+        
+        function toggleChartType(chartId) {
+            const chart = charts[chartId];
+            if (chart) {
+                const newType = chart.config.type === 'bar' ? 'line' : 
+                              chart.config.type === 'line' ? 'doughnut' : 'bar';
+                chart.config.type = newType;
+                chart.update();
+            }
+        }
+        
+        function loadMoreActivities() {
+            // Simulate loading more activities
+            const newActivities = [
+                { id: 6, type: 'payment', action: 'Premium payment received', user: 'Emma Davis', time: '4 hours ago', icon: 'credit-card', color: 'success' },
+                { id: 7, type: 'renewal', action: 'Policy renewal reminder sent', user: 'System', time: '5 hours ago', icon: 'envelope', color: 'info' }
+            ];
+            
+            const container = document.getElementById('activityList');
+            newActivities.forEach(activity => {
+                const activityHTML = `
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-${activity.icon} text-${activity.color}"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">${activity.action}</h6>
+                                    <small class="text-muted">By ${activity.user}</small>
+                                </div>
+                            </div>
+                            <small class="activity-time">${activity.time}</small>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', activityHTML);
+            });
+            
+            showSuccess('More activities loaded!');
+        }
+        
+        // ==============================================
+        // UTILITY FUNCTIONS
+        // ==============================================
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        function hideLoading() {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 500);
+        }
+        
+        function showError(message) {
+            showToast(message, 'danger');
+        }
+        
+        function showSuccess(message) {
+            showToast(message, 'success');
+        }
+        
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `position-fixed bottom-0 end-0 m-3`;
+            toast.innerHTML = `
+                <div class="toast show" role="alert">
+                    <div class="toast-header bg-${type} text-white">
+                        <strong class="me-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
+                        <button type="button" class="btn-close btn-close-white" onclick="this.parentElement.parentElement.remove()"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 5000);
+        }
+        
+        function setupAutoRefresh() {
+            // Clear existing interval
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Set new interval (5 minutes)
+            autoRefreshInterval = setInterval(() => {
+                console.log('Auto-refreshing dashboard data...');
+                loadDashboardData();
+            }, 5 * 60 * 1000);
+        }
+        
+        function setupEventListeners() {
+            // Resize charts on window resize
+            window.addEventListener('resize', function() {
+                Object.values(charts).forEach(chart => {
+                    if (chart && chart.resize) chart.resize();
+                });
+            });
+            
+            // Keep-alive for session
+            setInterval(() => {
+                const token = localStorage.getItem('gibsysnet_token');
+                if (token) {
+                    // Simulate keep-alive
+                    console.log('Session keep-alive');
+                }
+            }, 10 * 60 * 1000);
+        }
+        
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            showError('An unexpected error occurred');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policies Report - GIBSYSNET</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #8b5cf6;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --teal-color: #14b8a6;
+            --orange-color: #f97316;
+            --pink-color: #ec4899;
+            --dark-color: #1e293b;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Top Navigation Bar */
+        .top-nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .page-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .export-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .export-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Glass Card Effect */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.9) 0%, 
+                rgba(124, 58, 237, 0.9) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 1%);
+            background-size: 20px 20px;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-20px, -20px) rotate(360deg); }
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            padding: 25px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: white;
+            height: 100%;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 100%);
+            border-radius: 16px;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 10px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .stat-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .stat-trend.positive {
+            color: #a7f3d0;
+        }
+        
+        .stat-trend.negative {
+            color: #fca5a5;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        
+        .search-box input {
+            padding-left: 45px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 48px;
+        }
+        
+        .search-box input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        /* Tabs Navigation */
+        .nav-tabs-modern {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+        
+        .nav-tabs-modern .nav-link {
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        
+        .nav-tabs-modern .nav-link:hover {
+            background: rgba(139, 92, 246, 0.05);
+            color: #8b5cf6;
+        }
+        
+        .nav-tabs-modern .nav-link.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Table Styles */
+        .data-table-container {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-modern {
+            margin-bottom: 0;
+        }
+        
+        .table-modern thead th {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 16px;
+        }
+        
+        .table-modern tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .table-modern tbody tr:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
+        }
+        
+        .table-modern tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border: none;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-active {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+        }
+        
+        .status-expired {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+        
+        .status-cancelled {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            color: #374151;
+        }
+        
+        /* Policy Type Badges */
+        .policy-type-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .policy-vehicle {
+            background: linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%);
+            color: #1e40af;
+        }
+        
+        .policy-property {
+            background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%);
+            color: #92400e;
+        }
+        
+        .policy-health {
+            background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
+            color: #be185d;
+        }
+        
+        .policy-life {
+            background: linear-gradient(135deg, #d1fae5 0%, #34d399 100%);
+            color: #065f46;
+        }
+        
+        .policy-travel {
+            background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 100%);
+            color: #3730a3;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #8b5cf6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        
+        .toast-modern {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Action Buttons */
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .action-btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .action-btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .action-btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        /* Progress Bar */
+        .progress-modern {
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .progress-bar-modern {
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        
+        /* Timeline Component */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Modal Styles */
+        .modal-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .header-section {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .top-nav-bar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-left, .nav-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-title {
+                text-align: center;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p class="text-muted">Loading Policies Dashboard...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Top Navigation Bar -->
+        <div class="top-nav-bar glass-card">
+            <div class="nav-left">
+                <a href="../dashboard/dashboard-user.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <div>
+                    <h2 class="page-title">Policies Analytics & Reporting</h2>
+                    <p class="page-subtitle">Comprehensive overview and analysis of insurance policies portfolio</p>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="export-button" onclick="exportPoliciesReport()">
+                    <i class="fas fa-file-export"></i> Export Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="header-section glass-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-file-contract fa-3x text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="display-5 fw-bold mb-2">Policies Management Dashboard</h1>
+                            <p class="lead mb-0 opacity-75">Real-time tracking, analysis, and management of insurance policies</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                         <span class="badge bg-white text-primary fs-6">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            <span id="lastUpdate">Live Updates</span>
+                        </span>
+                        <span class="badge bg-white text-success fs-6">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            Portfolio Protected
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <div class="text-end">
+                            <h5 class="mb-1" id="currentDate">Loading...</h5>
+                            <p class="mb-0 opacity-75" id="currentTime">00:00:00</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-light rounded-circle p-2" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-cog fa-lg"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="refreshDashboard()"><i class="fas fa-sync-alt me-2"></i>Refresh Dashboard</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportToPDF()"><i class="fas fa-file-pdf me-2"></i>Export to PDF</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportToExcel()"><i class="fas fa-file-excel me-2"></i>Export to Excel</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="../reports/claims-report.html"><i class="fas fa-exclamation-triangle me-2"></i>Claims Report</a></li>
+                                <li><a class="dropdown-item" href="../dashboard/dashboard-user.html"><i class="fas fa-home me-2"></i>Main Dashboard</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h2 class="stat-number" id="totalPolicies">0</h2>
+                    <p class="stat-label">Total Policies</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="policiesTrend">0%</span> growth
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="stat-number" id="activePolicies">0</h2>
+                    <p class="stat-label">Active Policies</p>
+                    <div class="stat-trend">
+                        <i class="fas fa-chart-line"></i>
+                        <span id="activeTrend">0%</span> active rate
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h2 class="stat-number" id="totalPremium">$0</h2>
+                    <p class="stat-label">Total Premium</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="premiumTrend">0%</span> increase
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="stat-number" id="pendingRenewals">0</h2>
+                    <p class="stat-label">Pending Renewals</p>
+                    <div class="stat-trend negative">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="renewalTrend">0%</span> require action
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section glass-card">
+            <div class="row align-items-center mb-4">
+                <div class="col-md-6">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search policies by number, holder, or email...">
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="action-btn action-btn-primary me-2" onclick="applyFilters()">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                    <button class="action-btn action-btn-warning" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <select class="form-select select2" id="policyTypeFilter">
+                        <option value="">All Policy Types</option>
+                        <option value="vehicle">Vehicle</option>
+                        <option value="property">Property</option>
+                        <option value="health">Health</option>
+                        <option value="life">Life</option>
+                        <option value="travel">Travel</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select select2" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="expired">Expired</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control datepicker" id="dateFrom" placeholder="From Date">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control datepicker" id="dateTo" placeholder="To Date">
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="renewalCheck">
+                        <label class="form-check-label" for="renewalCheck">
+                            <i class="fas fa-sync text-warning me-1"></i> Show Renewals Only
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="highValueCheck">
+                        <label class="form-check-label" for="highValueCheck">
+                            <i class="fas fa-crown text-primary me-1"></i> High Value Policies
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="action-btn action-btn-success" onclick="openNewPolicyModal()">
+                        <i class="fas fa-plus"></i> New Policy
+                    </button>
+                    <button class="action-btn action-btn-primary" onclick="generateReport()">
+                        <i class="fas fa-chart-line"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs nav-tabs-modern" id="policiesTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-tab-pane" type="button">
+                    <i class="fas fa-chart-pie me-2"></i> Overview
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="policies-tab" data-bs-toggle="tab" data-bs-target="#policies-tab-pane" type="button">
+                    <i class="fas fa-list me-2"></i> All Policies
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics-tab-pane" type="button">
+                    <i class="fas fa-chart-bar me-2"></i> Analytics
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="renewals-tab" data-bs-toggle="tab" data-bs-target="#renewals-tab-pane" type="button">
+                    <i class="fas fa-history me-2"></i> Renewals
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="policiesTabsContent">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview-tab-pane" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="glass-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0"><i class="fas fa-chart-line text-purple me-2"></i>Policy Growth Trend</h4>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-purple active" onclick="setChartPeriod('week')">Week</button>
+                                    <button type="button" class="btn btn-sm btn-outline-purple" onclick="setChartPeriod('month')">Month</button>
+                                    <button type="button" class="btn btn-sm btn-outline-purple" onclick="setChartPeriod('quarter')">Quarter</button>
+                                    <button type="button" class="btn btn-sm btn-outline-purple" onclick="setChartPeriod('year')">Year</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="policiesTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <h4 class="mb-4"><i class="fas fa-chart-pie text-success me-2"></i>Policy Type Distribution</h4>
+                            <div class="chart-container">
+                                <canvas id="typeDistributionChart"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Portfolio Health</span>
+                                    <span>94%</span>
+                                </div>
+                                <div class="progress-modern">
+                                    <div class="progress-bar-modern" style="width: 94%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-clock text-warning me-2"></i>Upcoming Renewals</h4>
+                            <div id="upcomingRenewalsList">
+                                <!-- Upcoming renewals will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-bell text-info me-2"></i>Recent Activities</h4>
+                            <div class="timeline" id="recentActivities">
+                                <!-- Recent activities will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Policies Tab -->
+            <div class="tab-pane fade" id="policies-tab-pane" role="tabpanel">
+                <div class="data-table-container">
+                    <table id="policiesTable" class="table table-modern w-100">
+                        <thead>
+                            <tr>
+                                <th>Policy No</th>
+                                <th>Policy Holder</th>
+                                <th>Policy Type</th>
+                                <th>Premium</th>
+                                <th>Coverage</th>
+                                <th>Status</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Policies data will be loaded by DataTables -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="analytics-tab-pane" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-chart-bar text-purple me-2"></i>Premium by Type</h4>
+                            <div class="chart-container">
+                                <canvas id="premiumByTypeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-map-marker-alt text-danger me-2"></i>Geographic Distribution</h4>
+                            <div class="chart-container">
+                                <canvas id="geographicChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-calendar-alt text-success me-2"></i>Monthly Issuance</h4>
+                            <div class="chart-container">
+                                <canvas id="issuanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="glass-card p-4">
+                            <h4 class="mb-4"><i class="fas fa-chart-network text-warning me-2"></i>Renewal Pattern</h4>
+                            <div class="chart-container">
+                                <canvas id="renewalPatternChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Renewals Tab -->
+            <div class="tab-pane fade" id="renewals-tab-pane" role="tabpanel">
+                <div class="glass-card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="mb-0"><i class="fas fa-history text-info me-2"></i>Renewal Management</h4>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm w-auto" id="renewalFilter">
+                                <option value="30">Next 30 Days</option>
+                                <option value="60">Next 60 Days</option>
+                                <option value="90">Next 90 Days</option>
+                                <option value="all">All Renewals</option>
+                            </select>
+                            <button class="action-btn action-btn-primary" onclick="refreshRenewals()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="renewalsList">
+                        <!-- Renewals will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-white mt-5">
+            <p class="mb-1">GIBSYSNET Policies Management System v2.1 • <span id="systemVersion">2024.1</span></p>
+            <p class="mb-0 opacity-75">Real-time portfolio analytics • Last sync: <span id="lastSync">Just now</span></p>
+        </div>
+    </div>
+
+    <!-- Modal for Policy Details -->
+    <div class="modal fade modal-glass" id="policyDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Policy Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="policyDetailContent">
+                    <!-- Policy details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // ==============================================
+        // API CONFIGURATION
+        // ==============================================
+        
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        const API_ENDPOINTS = {
+            policies: `${API_BASE_URL}/api/policies`,
+            statistics: `${API_BASE_URL}/api/statistics`,
+            activities: `${API_BASE_URL}/api/activities`,
+            renewals: `${API_BASE_URL}/api/renewals`,
+            report: `${API_BASE_URL}/api/reports`
+        };
+        
+        // ==============================================
+        // SAMPLE DATA FOR DEMO (Fallback if API not available)
+        // ==============================================
+        const SAMPLE_POLICIES_DATA = [
+            {
+                id: 1,
+                policy_number: "POL-2024-001",
+                policy_holder: "John Smith",
+                policy_holder_email: "john@example.com",
+                policy_holder_phone: "+1 234-567-8900",
+                policy_type: "vehicle",
+                premium: 1250.50,
+                coverage_amount: 50000,
+                status: "active",
+                start_date: "2024-01-15",
+                end_date: "2025-01-14",
+                agent_name: "Sarah Johnson",
+                renewal_date: "2024-12-15",
+                documents: 3,
+                created_at: "2024-01-15T10:30:00Z",
+                updated_at: "2024-01-15T10:30:00Z"
+            },
+            {
+                id: 2,
+                policy_number: "POL-2024-002",
+                policy_holder: "Emma Davis",
+                policy_holder_email: "emma@example.com",
+                policy_holder_phone: "+1 234-567-8901",
+                policy_type: "property",
+                premium: 2500.75,
+                coverage_amount: 300000,
+                status: "active",
+                start_date: "2024-02-10",
+                end_date: "2025-02-09",
+                agent_name: "Mike Wilson",
+                renewal_date: "2025-01-10",
+                documents: 5,
+                created_at: "2024-02-10T14:20:00Z",
+                updated_at: "2024-02-10T14:20:00Z"
+            },
+            {
+                id: 3,
+                policy_number: "POL-2024-003",
+                policy_holder: "Robert Brown",
+                policy_holder_email: "robert@example.com",
+                policy_holder_phone: "+1 234-567-8902",
+                policy_type: "health",
+                premium: 1800.00,
+                coverage_amount: 100000,
+                status: "pending",
+                start_date: "2024-03-01",
+                end_date: "2024-12-31",
+                agent_name: "Lisa Anderson",
+                renewal_date: "2024-12-01",
+                documents: 2,
+                created_at: "2024-03-01T09:15:00Z",
+                updated_at: "2024-03-01T09:15:00Z"
+            },
+            {
+                id: 4,
+                policy_number: "POL-2024-004",
+                policy_holder: "Maria Garcia",
+                policy_holder_email: "maria@example.com",
+                policy_holder_phone: "+1 234-567-8903",
+                policy_type: "life",
+                premium: 3500.25,
+                coverage_amount: 1000000,
+                status: "active",
+                start_date: "2024-01-20",
+                end_date: "2034-01-19",
+                agent_name: "David Miller",
+                renewal_date: "2034-01-20",
+                documents: 4,
+                created_at: "2024-01-20T11:45:00Z",
+                updated_at: "2024-01-20T11:45:00Z"
+            },
+            {
+                id: 5,
+                policy_number: "POL-2024-005",
+                policy_holder: "Thomas Taylor",
+                policy_holder_email: "thomas@example.com",
+                policy_holder_phone: "+1 234-567-8904",
+                policy_type: "travel",
+                premium: 450.00,
+                coverage_amount: 50000,
+                status: "expired",
+                start_date: "2024-04-15",
+                end_date: "2024-10-14",
+                agent_name: "Jennifer Lee",
+                renewal_date: "2024-10-15",
+                documents: 6,
+                created_at: "2024-04-15T08:30:00Z",
+                updated_at: "2024-10-15T10:15:00Z"
+            }
+        ];
+        
+        const SAMPLE_STATISTICS = {
+            totalPolicies: 156,
+            activePolicies: 128,
+            totalPremium: 1854300,
+            pendingRenewals: 23,
+            policiesTrend: 8.5,
+            activeTrend: 5.2,
+            premiumTrend: 12.7,
+            renewalTrend: 15.3
+        };
+        
+        // ==============================================
+        // GLOBAL VARIABLES
+        // ==============================================
+        let policiesData = [];
+        let charts = {};
+        let dataTable = null;
+        let currentChartPeriod = 'month';
+        let autoRefreshInterval;
+        let realTimeWebSocket = null;
+        
+        // ==============================================
+        // INITIALIZATION
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Policies Dashboard initialization started...');
+            
+            // Check authentication
+            if (!checkAuth()) return;
+            
+            // Initialize components
+            initializeDateTime();
+            initializeSelect2();
+            initializeDatePickers();
+            initializeCharts();
+            
+            // Load data
+            loadPoliciesData();
+            loadStatistics();
+            loadUpcomingRenewals();
+            loadRecentActivities();
+            
+            // Setup real-time updates
+            setupRealTimeUpdates();
+            setupAutoRefresh();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            console.log('Policies Dashboard initialized successfully');
+        });
+        
+        // ==============================================
+        // AUTHENTICATION
+        // ==============================================
+        function checkAuth() {
+            const token = localStorage.getItem('gibsysnet_token');
+            const user = localStorage.getItem('gibsysnet_user');
+            
+            if (!token || !user) {
+                console.warn('No authentication found. Continuing in demo mode...');
+                // For demo purposes, we'll continue without redirecting
+            }
+            
+            console.log('Authentication check passed');
+            return true;
+        }
+        
+        // ==============================================
+        // DATA LOADING FUNCTIONS
+        // ==============================================
+        async function loadPoliciesData(filters = {}) {
+            showLoading();
+            
+            try {
+                // Try to fetch from API
+                let url = API_ENDPOINTS.policies;
+                const queryParams = new URLSearchParams(filters).toString();
+                if (queryParams) {
+                    url += `?${queryParams}`;
+                }
+                
+                const response = await fetchWithAuth(url);
+                
+                if (response && Array.isArray(response)) {
+                    policiesData = response;
+                } else {
+                    // Fallback to sample data
+                    console.log('Using sample policies data');
+                    policiesData = filterSampleData(SAMPLE_POLICIES_DATA, filters);
+                }
+                
+                initializeDataTable(policiesData);
+                
+            } catch (error) {
+                console.error('Error loading policies data:', error);
+                showError('Failed to load policies data. Using sample data.');
+                policiesData = filterSampleData(SAMPLE_POLICIES_DATA, filters);
+                initializeDataTable(policiesData);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        async function loadStatistics() {
+            try {
+                const response = await fetchWithAuth(API_ENDPOINTS.statistics);
+                if (response) {
+                    updateStatistics(response);
+                } else {
+                    // Fallback to sample statistics
+                    updateStatistics(SAMPLE_STATISTICS);
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                updateStatistics(SAMPLE_STATISTICS);
+            }
+        }
+        
+        async function loadUpcomingRenewals() {
+            try {
+                const response = await fetchWithAuth(`${API_ENDPOINTS.renewals}?upcoming=true`);
+                const renewals = response && Array.isArray(response) ? response.slice(0, 5) : 
+                               SAMPLE_POLICIES_DATA.filter(p => p.status === 'active').slice(0, 5);
+                
+                renderUpcomingRenewals(renewals);
+            } catch (error) {
+                console.error('Error loading upcoming renewals:', error);
+                const sampleRenewals = SAMPLE_POLICIES_DATA
+                    .filter(p => p.status === 'active')
+                    .slice(0, 5);
+                renderUpcomingRenewals(sampleRenewals);
+            }
+        }
+        
+        async function loadRecentActivities() {
+            try {
+                const response = await fetchWithAuth(API_ENDPOINTS.activities);
+                const activities = response && Array.isArray(response) ? response : getSampleActivities();
+                
+                renderRecentActivities(activities);
+            } catch (error) {
+                console.error('Error loading recent activities:', error);
+                renderRecentActivities(getSampleActivities());
+            }
+        }
+        
+        // ==============================================
+        // HELPER FUNCTIONS
+        // ==============================================
+        async function fetchWithAuth(url, options = {}) {
+            const token = localStorage.getItem('gibsysnet_token');
+            
+            const defaultOptions = {
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            };
+            
+            const finalOptions = { ...defaultOptions, ...options };
+            
+            try {
+                const response = await fetch(url, finalOptions);
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '../login.html';
+                        return null;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.warn('API Error:', error.message);
+                return null;
+            }
+        }
+        
+        function filterSampleData(data, filters) {
+            let filtered = [...data];
+            
+            if (filters.policy_type) {
+                filtered = filtered.filter(p => p.policy_type === filters.policy_type);
+            }
+            
+            if (filters.status) {
+                filtered = filtered.filter(p => p.status === filters.status);
+            }
+            
+            if (filters.date_from) {
+                const fromDate = new Date(filters.date_from);
+                filtered = filtered.filter(p => new Date(p.start_date) >= fromDate);
+            }
+            
+            if (filters.date_to) {
+                const toDate = new Date(filters.date_to);
+                filtered = filtered.filter(p => new Date(p.start_date) <= toDate);
+            }
+            
+            if (filters.search) {
+                const searchTerm = filters.search.toLowerCase();
+                filtered = filtered.filter(p => 
+                    p.policy_number.toLowerCase().includes(searchTerm) ||
+                    p.policy_holder.toLowerCase().includes(searchTerm) ||
+                    p.policy_holder_email.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            return filtered;
+        }
+        
+        function getSampleActivities() {
+            return [
+                {
+                    id: 1,
+                    action: "Policy issued",
+                    policy_number: "POL-2024-006",
+                    user: "Sarah Johnson",
+                    time: "10 minutes ago",
+                    icon: "file-contract",
+                    color: "success"
+                },
+                {
+                    id: 2,
+                    action: "Policy renewed",
+                    policy_number: "POL-2024-001",
+                    user: "Mike Wilson",
+                    time: "25 minutes ago",
+                    icon: "sync",
+                    color: "primary"
+                },
+                {
+                    id: 3,
+                    action: "Document uploaded",
+                    policy_number: "POL-2024-002",
+                    user: "Lisa Anderson",
+                    time: "1 hour ago",
+                    icon: "file-upload",
+                    color: "info"
+                },
+                {
+                    id: 4,
+                    action: "Policy status updated",
+                    policy_number: "POL-2024-003",
+                    user: "David Miller",
+                    time: "2 hours ago",
+                    icon: "edit",
+                    color: "warning"
+                }
+            ];
+        }
+        
+        // ==============================================
+        // UI INITIALIZATION
+        // ==============================================
+        function initializeDateTime() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        }
+        
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('en-US', dateOptions);
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleTimeString('en-US', timeOptions);
+            
+            // Update last sync time
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit'
+            });
+            document.getElementById('lastSync').textContent = timeString;
+        }
+        
+        function initializeSelect2() {
+            $('.select2').select2({
+                placeholder: 'Select option',
+                allowClear: true,
+                width: '100%'
+            });
+        }
+        
+        function initializeDatePickers() {
+            flatpickr('.datepicker', {
+                dateFormat: 'Y-m-d',
+                maxDate: 'today'
+            });
+        }
+        
+        function initializeCharts() {
+            // Policies Trend Chart
+            const trendCtx = document.getElementById('policiesTrendChart');
+            charts.trend = new Chart(trendCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            label: 'Issued',
+                            data: [45, 52, 48, 55, 60, 65, 70],
+                            borderColor: 'rgb(139, 92, 246)',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Renewed',
+                            data: [25, 28, 30, 32, 35, 38, 40],
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Policies'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Type Distribution Chart
+            const typeCtx = document.getElementById('typeDistributionChart');
+            charts.type = new Chart(typeCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Vehicle', 'Property', 'Health', 'Life', 'Travel'],
+                    datasets: [{
+                        data: [45, 30, 25, 20, 15],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(245, 158, 11)',
+                            'rgb(236, 72, 153)',
+                            'rgb(16, 185, 129)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            },
+                            formatter: (value) => {
+                                return value;
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+            
+            // Initialize other charts
+            initializeAnalyticsCharts();
+        }
+        
+        function initializeAnalyticsCharts() {
+            // Premium by Type Chart
+            const premiumCtx = document.getElementById('premiumByTypeChart');
+            charts.premium = new Chart(premiumCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Vehicle', 'Property', 'Health', 'Life', 'Travel'],
+                    datasets: [{
+                        label: 'Premium Amount',
+                        data: [450000, 750000, 320000, 280000, 150000],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(245, 158, 11)',
+                            'rgb(236, 72, 153)',
+                            'rgb(16, 185, 129)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Geographic Distribution Chart
+            const geoCtx = document.getElementById('geographicChart');
+            charts.geo = new Chart(geoCtx.getContext('2d'), {
+                type: 'polarArea',
+                data: {
+                    labels: ['North', 'South', 'East', 'West', 'Central'],
+                    datasets: [{
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ==============================================
+        // DATA TABLE FUNCTIONS
+        // ==============================================
+        function initializeDataTable(data) {
+            if (dataTable) {
+                dataTable.destroy();
+            }
+            
+            dataTable = $('#policiesTable').DataTable({
+                data: data,
+                columns: [
+                    { 
+                        data: 'policy_number',
+                        render: function(data, type, row) {
+                            return `<span class="fw-bold text-purple">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'policy_holder',
+                        render: function(data, type, row) {
+                            return `
+                                <div>
+                                    <div class="fw-medium">${data}</div>
+                                    <small class="text-muted">${row.policy_holder_email || ''}</small>
+                                </div>
+                            `;
+                        }
+                    },
+                    { 
+                        data: 'policy_type',
+                        render: function(data, type, row) {
+                            const typeConfig = {
+                                'vehicle': { class: 'policy-vehicle', label: 'Vehicle' },
+                                'property': { class: 'policy-property', label: 'Property' },
+                                'health': { class: 'policy-health', label: 'Health' },
+                                'life': { class: 'policy-life', label: 'Life' },
+                                'travel': { class: 'policy-travel', label: 'Travel' }
+                            };
+                            
+                            const config = typeConfig[data] || { class: 'bg-secondary', label: data };
+                            
+                            return `<span class="policy-type-badge ${config.class}">${config.label}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'premium',
+                        render: function(data, type, row) {
+                            return `<span class="fw-bold">${formatCurrency(data)}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'coverage_amount',
+                        render: function(data, type, row) {
+                            return `<span class="fw-medium">${formatCurrency(data)}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'status',
+                        render: function(data, type, row) {
+                            const statusConfig = {
+                                'active': { class: 'status-active', icon: 'check-circle', label: 'Active' },
+                                'pending': { class: 'status-pending', icon: 'clock', label: 'Pending' },
+                                'expired': { class: 'status-expired', icon: 'times-circle', label: 'Expired' },
+                                'cancelled': { class: 'status-cancelled', icon: 'ban', label: 'Cancelled' }
+                            };
+                            
+                            const config = statusConfig[data] || { class: 'bg-secondary', icon: 'question-circle', label: data };
+                            
+                            return `
+                                <span class="status-badge ${config.class}">
+                                    <i class="fas fa-${config.icon} me-1"></i>
+                                    ${config.label}
+                                </span>
+                            `;
+                        }
+                    },
+                    { 
+                        data: 'start_date',
+                        render: function(data, type, row) {
+                            return formatDate(data);
+                        }
+                    },
+                    { 
+                        data: 'end_date',
+                        render: function(data, type, row) {
+                            const today = new Date();
+                            const endDate = new Date(data);
+                            const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+                            
+                            let extraInfo = '';
+                            
+                            if (daysLeft < 30 && daysLeft > 0) {
+                                extraInfo = `<small class="text-warning d-block">${daysLeft} days left</small>`;
+                            } else if (daysLeft < 0) {
+                                extraInfo = `<small class="text-danger d-block">Expired</small>`;
+                            }
+                            
+                            return `
+                                <div>
+                                    <span>${formatDate(data)}</span>
+                                    ${extraInfo}
+                                </div>
+                            `;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary" onclick="viewPolicyDetail('${row.id}')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="renewPolicy('${row.id}')">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning" onclick="editPolicy('${row.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                pageLength: 10,
+                responsive: true,
+                order: [[0, 'desc']],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search policies...",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ policies",
+                    infoEmpty: "No policies found",
+                    infoFiltered: "(filtered from _MAX_ total policies)",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Next",
+                        previous: "Previous"
+                    }
+                },
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>'
+            });
+            
+            // Add search functionality
+            $('#searchInput').on('keyup', function() {
+                dataTable.search(this.value).draw();
+            });
+        }
+        
+        // ==============================================
+        // UI RENDER FUNCTIONS
+        // ==============================================
+        function updateStatistics(stats) {
+            document.getElementById('totalPolicies').textContent = stats.totalPolicies || 0;
+            document.getElementById('activePolicies').textContent = stats.activePolicies || 0;
+            document.getElementById('totalPremium').textContent = formatCurrency(stats.totalPremium || 0);
+            document.getElementById('pendingRenewals').textContent = stats.pendingRenewals || 0;
+            
+            document.getElementById('policiesTrend').textContent = `${stats.policiesTrend || 0}%`;
+            document.getElementById('activeTrend').textContent = `${stats.activeTrend || 0}%`;
+            document.getElementById('premiumTrend').textContent = `${stats.premiumTrend || 0}%`;
+            document.getElementById('renewalTrend').textContent = `${stats.renewalTrend || 0}%`;
+            
+            // Update trend colors
+            updateTrendColors('policiesTrend', stats.policiesTrend);
+            updateTrendColors('activeTrend', stats.activeTrend);
+            updateTrendColors('premiumTrend', stats.premiumTrend);
+            updateTrendColors('renewalTrend', stats.renewalTrend);
+        }
+        
+        function updateTrendColors(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const parent = element.closest('.stat-trend');
+            if (!parent) return;
+            
+            if (value > 0) {
+                parent.className = 'stat-trend positive';
+                parent.querySelector('i').className = 'fas fa-arrow-up';
+            } else if (value < 0) {
+                parent.className = 'stat-trend negative';
+                parent.querySelector('i').className = 'fas fa-arrow-down';
+            } else {
+                parent.className = 'stat-trend';
+                parent.querySelector('i').className = 'fas fa-minus';
+            }
+        }
+        
+        function renderUpcomingRenewals(renewals) {
+            const container = document.getElementById('upcomingRenewalsList');
+            if (!container) return;
+            
+            if (renewals.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <p class="text-muted">No upcoming renewals at the moment</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = renewals.map(policy => {
+                const endDate = new Date(policy.end_date);
+                const today = new Date();
+                const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+                
+                let daysClass = 'text-success';
+                if (daysLeft < 7) daysClass = 'text-danger';
+                else if (daysLeft < 30) daysClass = 'text-warning';
+                
+                return `
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">${policy.policy_number}</h6>
+                                    <small class="text-muted">${policy.policy_holder} • ${policy.policy_type}</small>
+                                </div>
+                                <span class="badge ${daysClass}">${daysLeft} days</span>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Ends: ${formatDate(policy.end_date)}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderRecentActivities(activities) {
+            const container = document.getElementById('recentActivities');
+            if (!container) return;
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="timeline-item">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-${activity.color} bg-opacity-10 p-2 rounded me-3">
+                                    <i class="fas fa-${activity.icon} text-${activity.color}"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">${activity.action}</h6>
+                                    <small class="text-muted">${activity.policy_number}</small>
+                                </div>
+                                <small class="text-muted">${activity.time}</small>
+                            </div>
+                            <p class="mb-0"><small>By ${activity.user}</small></p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ==============================================
+        // ACTION FUNCTIONS
+        // ==============================================
+        function applyFilters() {
+            const filters = {
+                policy_type: document.getElementById('policyTypeFilter').value,
+                status: document.getElementById('statusFilter').value,
+                date_from: document.getElementById('dateFrom').value,
+                date_to: document.getElementById('dateTo').value,
+                search: document.getElementById('searchInput').value
+            };
+            
+            // Remove empty filters
+            Object.keys(filters).forEach(key => {
+                if (!filters[key]) delete filters[key];
+            });
+            
+            // Add high value filter
+            if (document.getElementById('highValueCheck').checked) {
+                // Filter high value policies (premium > 1000)
+                if (dataTable) {
+                    dataTable.column(3).search('^([1-9]\\d{3,}|[5-9]\\d{2,})\\.\\d{2}$', true, false).draw();
+                }
+            }
+            
+            loadPoliciesData(filters);
+        }
+        
+        function resetFilters() {
+            document.getElementById('policyTypeFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('renewalCheck').checked = false;
+            document.getElementById('highValueCheck').checked = false;
+            
+            // Reset Select2
+            $('.select2').val(null).trigger('change');
+            
+            // Reset table search
+            if (dataTable) {
+                dataTable.search('').draw();
+                dataTable.column(3).search('').draw();
+            }
+            
+            loadPoliciesData();
+        }
+        
+        function refreshDashboard() {
+            showLoading();
+            setTimeout(() => {
+                loadPoliciesData();
+                loadStatistics();
+                loadUpcomingRenewals();
+                loadRecentActivities();
+                showSuccess('Dashboard refreshed successfully!');
+            }, 1000);
+        }
+        
+        function exportPoliciesReport() {
+            showLoading();
+            setTimeout(() => {
+                const dataStr = JSON.stringify({
+                    policies: policiesData,
+                    statistics: SAMPLE_STATISTICS,
+                    timestamp: new Date().toISOString()
+                }, null, 2);
+                
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                const exportFileDefaultName = `policies-report-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                hideLoading();
+                showSuccess('Policies report exported successfully!');
+            }, 1500);
+        }
+        
+        function generateReport() {
+            alert('Detailed policies report generation would be implemented here.');
+        }
+        
+        function openNewPolicyModal() {
+            alert('New policy modal would open here.');
+        }
+        
+        function viewPolicyDetail(policyId) {
+            const policy = policiesData.find(p => p.id == policyId) || 
+                         SAMPLE_POLICIES_DATA.find(p => p.id == policyId);
+            
+            if (policy) {
+                const modalContent = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Policy Information</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Policy Number:</strong></td>
+                                    <td>${policy.policy_number}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Policy Holder:</strong></td>
+                                    <td>${policy.policy_holder}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Policy Type:</strong></td>
+                                    <td><span class="policy-type-badge ${getPolicyTypeClass(policy.policy_type)}">${policy.policy_type}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Agent:</strong></td>
+                                    <td>${policy.agent_name}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Financial Details</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Premium:</strong></td>
+                                    <td>${formatCurrency(policy.premium)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Coverage:</strong></td>
+                                    <td>${formatCurrency(policy.coverage_amount)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td><span class="status-badge ${getStatusClass(policy.status)}">${policy.status}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Start Date:</strong></td>
+                                    <td>${formatDate(policy.start_date)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>End Date:</strong></td>
+                                    <td>${formatDate(policy.end_date)}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Contact Information</h6>
+                            <p><i class="fas fa-envelope me-2"></i>${policy.policy_holder_email}</p>
+                            <p><i class="fas fa-phone me-2"></i>${policy.policy_holder_phone}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Documents</h6>
+                            <p>${policy.documents || 0} document(s) attached</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('policyDetailContent').innerHTML = modalContent;
+                const modal = new bootstrap.Modal(document.getElementById('policyDetailModal'));
+                modal.show();
+            }
+        }
+        
+        function renewPolicy(policyId) {
+            if (confirm('Are you sure you want to renew this policy?')) {
+                showLoading();
+                setTimeout(() => {
+                    showSuccess('Policy renewed successfully!');
+                    refreshDashboard();
+                }, 1000);
+            }
+        }
+        
+        function editPolicy(policyId) {
+            alert(`Editing policy ${policyId} - This would open edit form`);
+        }
+        
+        function setChartPeriod(period) {
+            currentChartPeriod = period;
+            
+            // Update active button
+            document.querySelectorAll('#overview-tab-pane .btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log(`Chart period changed to: ${period}`);
+        }
+        
+        function refreshRenewals() {
+            showSuccess('Renewals refreshed');
+        }
+        
+        // ==============================================
+        // UTILITY FUNCTIONS
+        // ==============================================
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch (e) {
+                return dateString;
+            }
+        }
+        
+        function getStatusClass(status) {
+            const classes = {
+                'active': 'status-active',
+                'pending': 'status-pending',
+                'expired': 'status-expired',
+                'cancelled': 'status-cancelled'
+            };
+            return classes[status] || 'bg-secondary';
+        }
+        
+        function getPolicyTypeClass(type) {
+            const classes = {
+                'vehicle': 'policy-vehicle',
+                'property': 'policy-property',
+                'health': 'policy-health',
+                'life': 'policy-life',
+                'travel': 'policy-travel'
+            };
+            return classes[type] || 'bg-secondary';
+        }
+        
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        function hideLoading() {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 300);
+        }
+
+        function showToast(message, type = 'info', duration = 5000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            const toastHtml = `
+                <div id="${toastId}" class="toast-modern mb-3" role="alert">
+                    <div class="toast-body d-flex align-items-center p-3">
+                        <div class="toast-icon me-3">
+                            ${type === 'success' ? '<i class="fas fa-check-circle text-success fa-lg"></i>' : ''}
+                            ${type === 'error' ? '<i class="fas fa-exclamation-circle text-danger fa-lg"></i>' : ''}
+                            ${type === 'warning' ? '<i class="fas fa-exclamation-triangle text-warning fa-lg"></i>' : ''}
+                            ${type === 'info' ? '<i class="fas fa-info-circle text-primary fa-lg"></i>' : ''}
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="mb-0">${message}</p>
+                        </div>
+                        <button type="button" class="btn-close ms-3" onclick="document.getElementById('${toastId}').remove()"></button>
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('afterbegin', toastHtml);
+            
+            setTimeout(() => {
+                const toast = document.getElementById(toastId);
+                if (toast) {
+                    toast.style.transition = 'all 0.3s ease';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, duration);
+        }
+
+        function showSuccess(message) {
+            showToast(message, 'success');
+        }
+
+        function showError(message) {
+            showToast(message, 'error');
+        }
+
+        function showWarning(message) {
+            showToast(message, 'warning');
+        }
+
+        function showInfo(message) {
+            showToast(message, 'info');
+        }
+
+        // ==============================================
+        // REAL-TIME FUNCTIONALITY
+        // ==============================================
+        function setupRealTimeUpdates() {
+            // Check if WebSocket is supported
+            if ('WebSocket' in window) {
+                setupWebSocket();
+            } else {
+                // Fallback to polling
+                setupPolling();
+            }
+        }
+
+        function setupWebSocket() {
+            try {
+                const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsUrl = `${wsProtocol}//${window.location.hostname}:3000/ws`;
+                
+                realTimeWebSocket = new WebSocket(wsUrl);
+                
+                realTimeWebSocket.onopen = function() {
+                    console.log('WebSocket connection established');
+                    showInfo('Real-time updates connected');
+                };
+                
+                realTimeWebSocket.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleRealTimeUpdate(data);
+                    } catch (error) {
+                        console.error('Error parsing WebSocket message:', error);
+                    }
+                };
+                
+                realTimeWebSocket.onclose = function() {
+                    console.log('WebSocket connection closed');
+                    showWarning('Real-time updates disconnected. Reconnecting...');
+                    
+                    // Attempt to reconnect after 5 seconds
+                    setTimeout(setupWebSocket, 5000);
+                };
+                
+                realTimeWebSocket.onerror = function(error) {
+                    console.error('WebSocket error:', error);
+                };
+                
+            } catch (error) {
+                console.error('Failed to setup WebSocket:', error);
+                // Fallback to polling
+                setupPolling();
+            }
+        }
+
+        function setupPolling() {
+            console.log('Setting up polling for updates');
+            
+            // Poll every 30 seconds
+            autoRefreshInterval = setInterval(() => {
+                refreshDashboardSilently();
+            }, 30000);
+        }
+
+        function handleRealTimeUpdate(data) {
+            console.log('Real-time update received:', data);
+            
+            switch (data.type) {
+                case 'new_policy':
+                    showSuccess(`New policy issued: ${data.policy?.policy_number || 'Unknown'}`);
+                    refreshDashboardSilently();
+                    break;
+                    
+                case 'policy_renewed':
+                    showInfo(`Policy ${data.policy_number} renewed successfully`);
+                    refreshDashboardSilently();
+                    break;
+                    
+                case 'status_update':
+                    showInfo(`Policy ${data.policy_number} status updated to ${data.new_status}`);
+                    refreshDashboardSilently();
+                    break;
+            }
+            
+            // Update last update timestamp
+            document.getElementById('lastUpdate').innerHTML = `
+                <i class="fas fa-bolt me-1"></i>Live Updated ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            `;
+        }
+
+        function refreshDashboardSilently() {
+            // Silent refresh without showing loading overlay
+            loadStatistics();
+            if (dataTable) {
+                dataTable.ajax.reload(null, false);
+            }
+        }
+
+        function setupAutoRefresh() {
+            // Auto-refresh every 2 minutes for polling fallback
+            if (!realTimeWebSocket) {
+                setInterval(() => {
+                    refreshDashboardSilently();
+                }, 120000);
+            }
+        }
+
+        // ==============================================
+        // EVENT LISTENERS
+        // ==============================================
+        function setupEventListeners() {
+            // Search input with debounce
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    if (dataTable) {
+                        dataTable.search(e.target.value).draw();
+                    }
+                }, 300);
+            });
+            
+            // Filter change events
+            document.getElementById('policyTypeFilter').addEventListener('change', applyFilters);
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFrom').addEventListener('change', applyFilters);
+            document.getElementById('dateTo').addEventListener('change', applyFilters);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + F for search
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    document.getElementById('searchInput').focus();
+                }
+                
+                // Ctrl + R for refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshDashboard();
+                }
+                
+                // Escape to clear search
+                if (e.key === 'Escape') {
+                    document.getElementById('searchInput').value = '';
+                    if (dataTable) {
+                        dataTable.search('').draw();
+                    }
+                }
+            });
+            
+            // Tab change tracking
+            const tabEls = document.querySelectorAll('#policiesTabs button[data-bs-toggle="tab"]');
+            tabEls.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(event) {
+                    const activeTab = event.target.getAttribute('id');
+                    console.log('Tab changed to:', activeTab);
+                    
+                    // Load data for specific tabs when they become active
+                    if (activeTab === 'analytics-tab') {
+                        loadAnalyticsData();
+                    }
+                });
+            });
+            
+            // Responsive adjustments
+            window.addEventListener('resize', function() {
+                // Redraw charts on resize
+                Object.values(charts).forEach(chart => {
+                    if (chart) {
+                        chart.resize();
+                    }
+                });
+                
+                // Redraw DataTable
+                if (dataTable) {
+                    dataTable.columns.adjust().responsive.recalc();
+                }
+            });
+        }
+
+        // ==============================================
+        // ADVANCED ANALYTICS FUNCTIONS
+        // ==============================================
+        async function loadAnalyticsData() {
+            try {
+                // Simulate API calls
+                const premiumByType = { vehicle: 450000, property: 750000, health: 320000, life: 280000, travel: 150000 };
+                const geographicData = { north: 30, south: 25, east: 20, west: 15, central: 10 };
+                const issuanceData = { jan: 45, feb: 52, mar: 48, apr: 55, may: 60, jun: 65 };
+                const renewalData = { jan: 25, feb: 28, mar: 30, apr: 32, may: 35, jun: 38 };
+                
+                updateAnalyticsCharts(premiumByType, geographicData, issuanceData, renewalData);
+                
+            } catch (error) {
+                console.error('Error loading analytics data:', error);
+                // Use sample data for demo
+                updateAnalyticsCharts(
+                    { vehicle: 450000, property: 750000, health: 320000, life: 280000, travel: 150000 },
+                    { north: 30, south: 25, east: 20, west: 15, central: 10 },
+                    { jan: 45, feb: 52, mar: 48, apr: 55, may: 60, jun: 65 },
+                    { jan: 25, feb: 28, mar: 30, apr: 32, may: 35, jun: 38 }
+                );
+            }
+        }
+
+        function updateAnalyticsCharts(premiumByType, geographicData, issuanceData, renewalData) {
+            // Update Premium by Type Chart
+            if (charts.premium) {
+                charts.premium.data.datasets[0].data = [
+                    premiumByType.vehicle || 0,
+                    premiumByType.property || 0,
+                    premiumByType.health || 0,
+                    premiumByType.life || 0,
+                    premiumByType.travel || 0
+                ];
+                charts.premium.update();
+            }
+            
+            // Update Geographic Distribution Chart
+            if (charts.geo) {
+                charts.geo.data.datasets[0].data = [
+                    geographicData.north || 0,
+                    geographicData.south || 0,
+                    geographicData.east || 0,
+                    geographicData.west || 0,
+                    geographicData.central || 0
+                ];
+                charts.geo.update();
+            }
+            
+            // Update Issuance Chart
+            if (!charts.issuance) {
+                const issuanceCtx = document.getElementById('issuanceChart');
+                charts.issuance = new Chart(issuanceCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Policies Issued',
+                            data: Object.values(issuanceData).slice(0, 6),
+                            borderColor: 'rgb(139, 92, 246)',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Policies'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Update Renewal Pattern Chart
+            if (!charts.renewal) {
+                const renewalCtx = document.getElementById('renewalPatternChart');
+                charts.renewal = new Chart(renewalCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [
+                            {
+                                label: 'Issued',
+                                data: Object.values(issuanceData).slice(0, 6),
+                                backgroundColor: 'rgba(139, 92, 246, 0.7)'
+                            },
+                            {
+                                label: 'Renewed',
+                                data: Object.values(renewalData).slice(0, 6),
+                                backgroundColor: 'rgba(16, 185, 129, 0.7)'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Policies'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==============================================
+        // EXPORT AND PRINT FUNCTIONS
+        // ==============================================
+        async function exportToPDF() {
+            showLoading();
+            try {
+                showSuccess('PDF report generation would be implemented here');
+            } catch (error) {
+                console.error('Error exporting to PDF:', error);
+                showError('Failed to generate PDF report');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function exportToExcel() {
+            showLoading();
+            try {
+                showSuccess('Excel report generation would be implemented here');
+            } catch (error) {
+                console.error('Error exporting to Excel:', error);
+                showError('Failed to generate Excel report');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ==============================================
+        // INITIALIZATION COMPLETE
+        // ==============================================
+        console.log('Policies Dashboard fully initialized');
+        hideLoading();
+        
+        // Show welcome message
+        setTimeout(() => {
+            showInfo('Dashboard loaded successfully. Real-time updates active.');
+        }, 1000);
+    </script>
+</body>
+</html>
